@@ -81,10 +81,14 @@ function create(this: Phaser.Scene) {
       const x = 20 + c * 60;
       const y = 500 + r * 60;
       const button = this.add.image(x, y, `pokemon${r}${c}`).setOrigin(0, 0)
-        .setInteractive({ userHandCursor: true }).setDisplaySize(55, 55);
+        .setInteractive({ userHandCursor: true, draggable: true }).setDisplaySize(55, 55);
         button.on('pointerdown', () => {
           showPopup(this, r, c, `pokemon${r}${c}`);
         });
+        button.on('dragend', (pointer: Phaser.Input.Pointer) => {
+          placeTower(this, pointer.worldX - 22.5, pointer.worldY - 22.5, `pokemon${r}${c}`);
+          button.setPosition(x, y);
+        })
     }
   }
   for (let b = 0; b < 3; b++) {
@@ -161,4 +165,15 @@ function update(this: Phaser.Scene, time: number, delta: number) {
 
 export function changeLabel(area: string) {
   areaLabel.setText(area);
+}
+
+function placeTower(scene: Phaser.Scene, x: number, y: number, key: string) {
+  const tower = scene.add.image(x, y, key).setDisplaySize(50, 50).setOrigin(0, 0);
+  switch (key) {
+    case "pokemon00":
+      scene.time.addEvent({
+        
+      });
+      break;
+  }
 }
