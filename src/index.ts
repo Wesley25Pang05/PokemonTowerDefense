@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { paths, startRound, area } from './round';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -15,19 +16,46 @@ const game = new Phaser.Game(config);
 
 let path1: Phaser.Curves.Path;
 let path2: Phaser.Curves.Path;
+let areaLabel: Phaser.GameObjects.Text;
 let enemies: Phaser.GameObjects.PathFollower[] = [];
 
 function preload(this: Phaser.Scene) {
-  this.load.image('enemy', 'pokeball.png');
+  const kantoMons: string[] = [
+  "Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard",
+  "Squirtle", "Wartortle", "Blastoise", "Caterpie", "Metapod", "Butterfree",
+  "Weedle", "Kakuna", "Beedrill", "Pidgey", "Pidgeotto", "Pidgeot", "Rattata",
+  "Raticate", "Spearow", "Fearow", "Ekans", "Arbok", "Pikachu", "Raichu",
+  "Sandshrew", "Sandslash", "NidoranF", "Nidorina", "Nidoqueen", "NidoranM", "Nidorino",
+  "Nidoking", "Clefairy", "Clefable", "Vulpix", "Ninetales", "Jigglypuff",
+  "Wigglytuff", "Zubat", "Golbat", "Oddish", "Gloom", "Vileplume", "Paras",
+  "Parasect", "Venonat", "Venomoth", "Diglett", "Dugtrio", "Meowth", "Persian",
+  "Psyduck", "Golduck", "Mankey", "Primeape", "Growlithe", "Arcanine", "Poliwag",
+  "Poliwhirl", "Poliwrath", "Abra", "Kadabra", "Alakazam", "Machop", "Machoke",
+  "Machamp", "Bellsprout", "Weepinbell", "Victreebel", "Tentacool", "Tentacruel",
+  "Geodude", "Graveler", "Golem", "Ponyta", "Rapidash", "Slowpoke", "Slowbro",
+  "Magnemite", "Magneton", "Farfetch’d", "Doduo", "Dodrio", "Seel", "Dewgong",
+  "Grimer", "Muk", "Shellder", "Cloyster", "Gastly", "Haunter", "Gengar", "Onix",
+  "Drowzee", "Hypno", "Krabby", "Kingler", "Voltorb", "Electrode", "Exeggcute",
+  "Exeggutor", "Cubone", "Marowak", "Hitmonlee", "Hitmonchan", "Lickitung",
+  "Koffing", "Weezing", "Rhyhorn", "Rhydon", "Chansey", "Tangela", "Kangaskhan",
+  "Horsea", "Seadra", "Goldeen", "Seaking", "Staryu", "Starmie", "Mr. Mime",
+  "Scyther", "Jynx", "Electabuzz", "Magmar", "Pinsir", "Tauros", "Magikarp",
+  "Gyarados", "Lapras", "Ditto", "Eevee", "Vaporeon", "Jolteon", "Flareon",
+  "Porygon", "Omanyte", "Omastar", "Kabuto", "Kabutops", "Aerodactyl", "Snorlax",
+  "Articuno", "Zapdos", "Moltres", "Dratini", "Dragonair", "Dragonite", "Mewtwo", "Mew"
+];
+  for (const name of kantoMons) {
+    this.load.image(name, `assets/kanto/${name}.png`);
+  }
   this.load.image('bg', 'hoenn3.png');
   this.load.text('pokemonDescriptions', 'pokemonDescriptions.txt')
   for (let r = 0; r < 3; r++) {
     for (let c = 0; c < 10; c++) {
       const key = `pokemon${r}${c}`;
-      this.load.image(key, `pokemon/${key}.png`);
-      this.load.image(`${key}0`, `pokemon/${key}0.png`);
-      this.load.image(`${key}1`, `pokemon/${key}1.png`);
-      this.load.image(`${key}2`, `pokemon/${key}2.png`);
+      this.load.image(key, `assets/pokemon/${key}.png`);
+      this.load.image(`${key}0`, `assets/pokemon/${key}0.png`);
+      this.load.image(`${key}1`, `assets/pokemon/${key}1.png`);
+      this.load.image(`${key}2`, `assets/pokemon/${key}2.png`);
     }
   }
 }
@@ -62,61 +90,31 @@ function create(this: Phaser.Scene) {
   for (let b = 0; b < 3; b++) {
     const button = this.add.image(1460, 500 + b * 60, `button${b}`).setOrigin(0, 0)
       .setInteractive({ userHandCursor: true }).setDisplaySize(55, 55);
+    switch (b) {
+      case 0:
+        break;
+      case 1:
+        break;
+      case 2:
+        button.on('pointerdown', () => {
+          startRound(this);
+        });
+    }
   }
+  paths(this);
 
   this.add.image(0, 0, 'bg')
   .setOrigin(0, 0)
   .setDisplaySize(1920, 480);
 
-  path1 = this.add.path(240, 480);
-  path1.lineTo(240, 410);
-  path1.lineTo(170, 410);
-  path1.lineTo(170, 360);
-  path1.lineTo(120, 360);
-  path1.lineTo(120, 330);
-  path1.lineTo(210, 330);
-  path1.lineTo(210, 270);
-  path1.lineTo(310, 270);
-  path1.lineTo(310, 236);
-  path1.lineTo(362, 236);
-  path1.lineTo(362, 260);
-  path1.lineTo(1092, 260);
-  path1.lineTo(1092, 160);
-  
-  path2 = this.add.path(168, 40);
-  path2.lineTo(168, 118);
-  path2.lineTo(260, 118);
-  path2.lineTo(260, 192);
-  path2.lineTo(432, 192);
-  path2.lineTo(432, 216);
-  path2.lineTo(1192, 216);
-  path2.lineTo(1192, 263);
-  path2.lineTo(1270, 263);
-  path2.lineTo(1270, 284);
-  path2.lineTo(1365, 284);
-  path2.lineTo(1365, 311);
-  path2.lineTo(1920, 311);
-
-  const graphics = this.add.graphics();
-  graphics.lineStyle(1, 0x000000, 1);
-  path1.draw(graphics);
-  path2.draw(graphics);
-  
-  const enemy = this.add.follower(path1, 240, 500, 'enemy');
-  enemy.setScale(0.5);
-
-  enemy.startFollow({
-    duration: 3000,
-    rotateToPath: true,
-    onComplete: () => {
-      enemy.setPosition(168, 40);
-      enemy.path = path2;
-      enemy.startFollow({
-        duration: 3000,
-        rotateToPath: true,
-      })
-    }
-  })
+  areaLabel = this.add.text(10, 10, `${area}`, {
+    fontSize: '24px',
+    fontFamily: 'Arial',
+    backgroundColor: '#ff474C',
+    color: '#ffffff',
+    padding: { x: 2, y: 1 },
+  });
+  paths(this);
 }
 
 let popupContainer: Phaser.GameObjects.Container;
@@ -159,4 +157,8 @@ function update(this: Phaser.Scene, time: number, delta: number) {
     enemy.destroy();
     return false;
   });
+}
+
+export function changeLabel(area: string) {
+  areaLabel.setText(area);
 }
