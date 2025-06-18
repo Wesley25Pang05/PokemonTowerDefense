@@ -22,9 +22,11 @@ function preload(this: Phaser.Scene) {
   this.load.image('bg', 'hoenn3.png');
   for (let r = 0; r < 3; r++) {
     for (let c = 0; c < 10; c++) {
-      const key = 'pokemon${row}$col}';
-      const path = 'towers/${key}.png';
-      this.load.image(key, path);
+      const key = `pokemon${r}${c}`;
+      this.load.image(key, `pokemon/${key}.png`);
+      this.load.image(`${key}0`, `pokemon/${key}0.png`);
+      this.load.image(`${key}1`, `pokemon/${key}1.png`);
+      this.load.image(`${key}2`, `pokemon/${key}2.png`);
     }
   }
 }
@@ -32,16 +34,20 @@ function preload(this: Phaser.Scene) {
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
 
-  const pokemonButtonWidth = 50;
-  const pokemonButtonHeight = 50;
-  const spacing = 15;
   for (let r = 0; r < 3; r++) {
     for (let c = 0; c < 10; c++) {
-      const x = 20 + c * (pokemonButtonWidth + spacing);
-      const y = 500 + r * (pokemonButtonHeight + spacing);
-      const button = this.add.image(x, y, 'pokemon/${row}${col}.png').setOrigin(0, 0)
-        .setInteractive({ userHandCursor: true }).setDisplaySize(pokemonButtonWidth, pokemonButtonHeight);
+      const x = 20 + c * 60;
+      const y = 500 + r * 60;
+      const button = this.add.image(x, y, `pokemon${r}${c}`).setOrigin(0, 0)
+        .setInteractive({ userHandCursor: true }).setDisplaySize(55, 55);
+        button.on('pointerdown', () => {
+          showPopup(this, r, c);
+        });
     }
+  }
+  for (let b = 0; b < 3; b++) {
+    const button = this.add.image(1460, 500 + b * 60, `button${b}`).setOrigin(0, 0)
+      .setInteractive({ userHandCursor: true }).setDisplaySize(55, 55);
   }
 
   this.add.image(0, 0, 'bg')
@@ -97,6 +103,37 @@ function create(this: Phaser.Scene) {
       })
     }
   })
+}
+
+let popupContainer: Phaser.GameObjects.Container;
+function showPopup(scene: Phaser.Scene, r: number, c: number) {
+  if (popupContainer) popupContainer.destroy();
+
+  const boxX = 640;
+  const boxY = 500;
+
+  popupContainer = scene.add.container();
+
+  const background = scene.add.rectangle(boxX, boxY, 780, 180, 0x800000)
+    .setOrigin(0, 0)
+    .setStrokeStyle(2, 0xffffff);
+  popupContainer.add(background);
+
+  const label = scene.add.text(boxX + 20, boxY + 10, `More Pokémon`, {
+    fontSize: '20px',
+    color: '#ffffff'
+  });
+  popupContainer.add(label);
+  const pokemonKeys = [`pokemon${r}${c}0`, `pokemon${r}${c}1`, `pokemon${r}${c}2`];
+
+  for (let i = 0; i < 3; i++) {
+    const px = boxX + 700;
+    const py = boxY + i * 60;
+    const pkm = scene.add.image(px, py, pokemonKeys[i])
+      .setOrigin(0, 0)
+      .setDisplaySize(55, 55);
+    popupContainer.add(pkm);
+  }
 }
 
 function update(this: Phaser.Scene, time: number, delta: number) {
