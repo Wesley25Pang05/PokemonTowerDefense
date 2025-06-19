@@ -77,6 +77,7 @@ export let enemiesGroup: Phaser.Physics.Arcade.Group;
 const descriptionMap: Record<string, string> = {};
 let playerHealth = 0; let currentHealth = 0;
 let playerDef = 0; let playerSpDef = 0;
+let playerEXP = 4000;
 
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
@@ -98,13 +99,24 @@ function create(this: Phaser.Scene) {
       const y = 500 + r * 60;
       const button = this.add.image(x, y, `pokemon${r}${c}`).setOrigin(0, 0)
         .setInteractive({ userHandCursor: true, draggable: true }).setDisplaySize(55, 55);
-        button.on('pointerdown', () => {
-          showPopup(this, r, c, `pokemon${r}${c}`);
-        });
-        button.on('dragend', (pointer: Phaser.Input.Pointer) => {
-          placeTower(this, pointer.worldX - 22.5, pointer.worldY - 22.5, `pokemon${r}${c}`);
-          button.setPosition(x, y);
-        })
+      button.on('pointerdown', () => {
+        showPopup(this, r, c, `pokemon${r}${c}`);
+      });
+      button.on('dragend', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image) => {
+        let placed = false;
+  
+        for (const slot of placementSlots) {
+          const bounds = slot.container.getBounds();
+          if (Phaser.Geom.Rectangle.Contains(bounds, pointer.x, pointer.y) && !slot.occupied) {
+            const tower = placeTower(this, slot.x, slot.y, `pokemon${r}${c}`);
+            if (tower) {
+              slot.occupied = true;
+              placed = true;
+            }
+            break;
+          }
+        }
+      });
     }
   }
   for (let b = 0; b < 3; b++) {
@@ -122,11 +134,45 @@ function create(this: Phaser.Scene) {
     }
   }
 
-  enemiesGroup = this.physics.add.group();
-
   this.add.image(0, 0, 'bg')
   .setOrigin(0, 0)
   .setDisplaySize(1920, 480);
+
+  const placementSlots: {
+    container: Phaser.GameObjects.Container,
+    x: number,
+    y: number,
+    occupied: boolean
+  }[] = [];
+  const customSlotPositions = [
+    { x: 200, y: 85 },
+    { x: 220, y: 370 },
+    { x: 395, y: 225 },
+    { x: 180, y: 205 },
+    { x: 348, y: 85 },
+    { x: 373, y: 348 },
+    { x: 700, y: 300 },
+    { x: 1000, y: 300 },
+    { x: 850, y: 170 },
+    { x: 528, y: 136 },
+    { x: 523, y: 380 },
+    { x: 1116, y: 353 },
+    { x: 1260, y: 353 },
+    { x: 1078, y: 45 },
+    { x: 1430, y: 180 }
+  ];
+  for (const pos of customSlotPositions) {
+    const rect = this.add.rectangle(0, 0, 54, 54, 0x444444, 0.2).setStrokeStyle(2, 0xffffff);
+
+    const img = this.add.image(0, 0, 'slot-image').setDisplaySize(54, 54).setAlpha(0.5);
+
+    const container = this.add.container(pos.x, pos.y, [img, rect]);
+    container.setSize(54, 54);
+
+    placementSlots.push({ container, x: pos.x, y: pos.y, occupied: false });
+  }
+
+  enemiesGroup = this.physics.add.group();
 
   areaLabel = this.add.text(10, 10, `${area}`, {
     fontSize: '24px',
@@ -135,7 +181,7 @@ function create(this: Phaser.Scene) {
     color: '#ffffff',
     padding: { x: 2, y: 1 },
   });
-  healthLabel = this.add.text(1225, 10, `❤️${currentHealth}`, {
+  healthLabel = this.add.text(1125, 10, `Place your starter Pokémon!`, {
     fontSize: '24px',
     fontFamily: 'Arial',
     stroke: '#000000',
@@ -192,31 +238,34 @@ export function changeLabel(area: string) {
   areaLabel.setText(area);
 }
 
-function placeTower(scene: Phaser.Scene, x: number, y: number, key: string) {
-  let tower = new Object();
+function placeTower(scene: Phaser.Scene, x: number, y: number, key: string): Phaser.GameObjects.Image | undefined {
+  let tower: Phaser.GameObjects.Image | undefined;
+
   switch (key) {
     case "pokemon00":
-      tower = new Rowlett(scene, x, y).setDisplaySize(50, 50).setOrigin(0, 0);
+      tower = new Rowlett(scene, x, y).setDisplaySize(50, 50).setOrigin(0.5);
       playerHealth += 68; playerDef += 11; playerSpDef += 10;
       updateHealth(68, true);
       break;
     case "pokemon10":
-      tower = new Oshawott(scene, x, y).setDisplaySize(50, 50).setOrigin(0, 0);
+      tower = new Oshawott(scene, x, y).setDisplaySize(50, 50).setOrigin(0.5);
       playerHealth += 55; playerDef += 9; playerSpDef += 9;
       updateHealth(55, true);
       break;
     case "pokemon20":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(50, 50).setOrigin(0, 0);
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(50, 50).setOrigin(0.5);
       playerHealth += 39; playerDef += 8.6; playerSpDef += 10;
-      updateHealth(55, true);
+      updateHealth(39, true);
       break;
   }
+
+  return tower;
 }
 
 export function updateHealth(heal: integer, special: boolean) {
   if (currentHealth >= 0) {
     const reduce = special ? playerSpDef : playerDef;
     currentHealth = heal >= 0 ? playerHealth : currentHealth + Math.round(heal / reduce);
-    healthLabel.setText(`❤️${currentHealth}   ⛊${Math.round(playerDef)}   ⛉${Math.round(playerSpDef)}`);
+    healthLabel.setText(`❤️${currentHealth}   ⛊${Math.round(playerDef)}   ⛉${Math.round(playerSpDef)}   💰${Math.round(playerEXP)}`);
   }
 }
