@@ -54,6 +54,19 @@ export class Rowlett extends Phaser.GameObjects.Image {
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
         takeDamage((enemy as any), scene, "Grass", 88);
         projectile.destroy();
-    });
+      });
+      const updateHandler = () => {
+        if (!projectile.active) {
+          scene.events.off('update', updateHandler);
+          return;
+        }
+
+        if (projectile.y > 480) {
+          projectile.destroy();
+          scene.events.off('update', updateHandler);
+        }
+      };
+
+    scene.events.on('update', updateHandler);
   }
 }

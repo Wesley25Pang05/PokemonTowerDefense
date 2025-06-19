@@ -58,10 +58,16 @@ function preload(this: Phaser.Scene) {
     this.load.image(name, `assets/kanto/${name}.png`);
   }
   for (let p = 0; p < 100; p++) {
-    this.load.image("projectile" + p, `assets/projectiles/projectile${p}.png`)
+    this.load.image("projectile" + p, `assets/projectiles/projectile${p}.png`);
   }
   this.load.image('bg', 'hoenn3.png');
-  this.load.text('pokemonDescriptions', 'pokemonDescriptions.txt')
+  this.load.text('pokemonDescriptions', 'pokemonDescriptions.txt');
+  this.load.image('Nor', `assets/habitats/Nor.png`);
+  this.load.image('Gra', `assets/habitats/Gra.png`);
+  this.load.image('Wat', `assets/habitats/Wat.png`);
+  this.load.image('Fly', `assets/habitats/Fly.png`);
+  this.load.image('Roc', `assets/habitats/Roc.png`);
+  this.load.image('Psy', `assets/habitats/Psy.png`);
   for (let r = 0; r < 3; r++) {
     for (let c = 0; c < 10; c++) {
       const key = `pokemon${r}${c}`;
@@ -77,7 +83,7 @@ export let enemiesGroup: Phaser.Physics.Arcade.Group;
 const descriptionMap: Record<string, string> = {};
 let playerHealth = 0; let currentHealth = 0;
 let playerDef = 0; let playerSpDef = 0;
-let playerEXP = 4000;
+let playerEXP = 5000;
 
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
@@ -97,6 +103,12 @@ function create(this: Phaser.Scene) {
     for (let c = 0; c < 10; c++) {
       const x = 20 + c * 60;
       const y = 500 + r * 60;
+      const typeList = [
+        [["Gra", "Fly"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"]],
+        [["Wat", "Wat"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"]],
+        [["Fir", "Fir"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"]]
+      ]
+      const typeOne = typeList[r][c][0]; const typeTwo = typeList[r][c][1];
       const button = this.add.image(x, y, `pokemon${r}${c}`).setOrigin(0, 0)
         .setInteractive({ userHandCursor: true, draggable: true }).setDisplaySize(55, 55);
       button.on('pointerdown', () => {
@@ -104,14 +116,21 @@ function create(this: Phaser.Scene) {
       });
       button.on('dragend', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image) => {
         let placed = false;
-  
+        const cost = [
+          [3599, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999],
+          [4884, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999],
+          [4884, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999]
+        ]
         for (const slot of placementSlots) {
           const bounds = slot.container.getBounds();
-          if (Phaser.Geom.Rectangle.Contains(bounds, pointer.x, pointer.y) && !slot.occupied) {
+          if (Phaser.Geom.Rectangle.Contains(bounds, pointer.x, pointer.y) && !slot.occupied && playerEXP >= cost[r][c] &&
+          (slot.habitat.indexOf(typeOne) != -1 || slot.habitat.indexOf(typeTwo) != -1)) {
+            playerEXP -= cost[r][c];
             const tower = placeTower(this, slot.x, slot.y, `pokemon${r}${c}`);
             if (tower) {
               slot.occupied = true;
               placed = true;
+              button.destroy();
             }
             break;
           }
@@ -142,34 +161,35 @@ function create(this: Phaser.Scene) {
     container: Phaser.GameObjects.Container,
     x: number,
     y: number,
+    habitat: string,
     occupied: boolean
   }[] = [];
   const customSlotPositions = [
-    { x: 200, y: 85 },
-    { x: 220, y: 370 },
-    { x: 395, y: 225 },
-    { x: 180, y: 205 },
-    { x: 348, y: 85 },
-    { x: 373, y: 348 },
-    { x: 700, y: 300 },
-    { x: 1000, y: 300 },
-    { x: 850, y: 170 },
-    { x: 528, y: 136 },
-    { x: 523, y: 380 },
-    { x: 1116, y: 353 },
-    { x: 1260, y: 353 },
-    { x: 1078, y: 45 },
-    { x: 1430, y: 180 }
+    { x: 200, y: 85, habitat: "Nor, Fir, Fig"},
+    { x: 220, y: 370, habitat: "Nor, Fir, Fig"},
+    { x: 395, y: 225, habitat: "Nor, Fir, Fig"},
+    { x: 180, y: 205, habitat: "Gra, Poi, Ele"},
+    { x: 348, y: 85, habitat: "Gra, Poi, Ele"},
+    { x: 373, y: 348, habitat: "Gra, Poi, Ele"},
+    { x: 700, y: 300, habitat: "Wat, Ice, Dra"},
+    { x: 1000, y: 300, habitat: "Wat, Ice, Dra"},
+    { x: 850, y: 170, habitat: "Wat, Ice, Dra"},
+    { x: 528, y: 136, habitat: "Fly, Bug"},
+    { x: 523, y: 380, habitat: "Fly, Bug"},
+    { x: 1116, y: 353, habitat: "Fly, Bug"},
+    { x: 1260, y: 353, habitat: "Fly, Bug"},
+    { x: 1078, y: 45, habitat: "Roc, Gro"},
+    { x: 1430, y: 180, habitat: "Psy, Fai"}
   ];
   for (const pos of customSlotPositions) {
-    const rect = this.add.rectangle(0, 0, 54, 54, 0x444444, 0.2).setStrokeStyle(2, 0xffffff);
+    const rect = this.add.rectangle(0, 0, 54, 54, 0x444444, 0.2).setStrokeStyle(1, 0xffffff);
 
-    const img = this.add.image(0, 0, 'slot-image').setDisplaySize(54, 54).setAlpha(0.5);
+    const img = this.add.image(0, 0, `${pos.habitat.substring(0, 3)}`).setDisplaySize(54, 54).setAlpha(0.8);
 
     const container = this.add.container(pos.x, pos.y, [img, rect]);
     container.setSize(54, 54);
 
-    placementSlots.push({ container, x: pos.x, y: pos.y, occupied: false });
+    placementSlots.push({ container, x: pos.x, y: pos.y, habitat: pos.habitat, occupied: false });
   }
 
   enemiesGroup = this.physics.add.group();
@@ -260,6 +280,11 @@ function placeTower(scene: Phaser.Scene, x: number, y: number, key: string): Pha
   }
 
   return tower;
+}
+
+export function award(exp: integer) {
+  playerEXP += exp * 2;
+  healthLabel.setText(`❤️${currentHealth}   ⛊${Math.round(playerDef)}   ⛉${Math.round(playerSpDef)}   💰${Math.round(playerEXP)}`);
 }
 
 export function updateHealth(heal: integer, special: boolean) {

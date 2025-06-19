@@ -60,5 +60,18 @@ export class Oshawott extends Phaser.GameObjects.Image {
         takeDamage((enemy as any), scene, "Water", 22.68);
         projectile.destroy();
     });
+    const updateHandler = () => {
+      if (!projectile.active) {
+        scene.events.off('update', updateHandler);
+        return;
+      }
+
+      if (projectile.y > 480) {
+        projectile.destroy();
+        scene.events.off('update', updateHandler);
+      }
+    };
+
+    scene.events.on('update', updateHandler);
   }
 }

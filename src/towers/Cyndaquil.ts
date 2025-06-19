@@ -61,5 +61,18 @@ export class Cyndaquil extends Phaser.GameObjects.Image {
         statusPossibility((enemy as any), "Burn", 0.1);
         projectile.destroy();
     });
+    const updateHandler = () => {
+      if (!projectile.active) {
+        scene.events.off('update', updateHandler);
+        return;
+      }
+
+      if (projectile.y > 480) {
+        projectile.destroy();
+        scene.events.off('update', updateHandler);
+      }
+    };
+
+    scene.events.on('update', updateHandler);
   }
 }

@@ -1,35 +1,35 @@
 pokemon00
-Rowlett is a Grass/Flying Physical Pokémon that, despite being a slow and weak attacker, can reach from a far distance and be placed on trees. It uses grass moves until it branches out into an Alolan Decidueye with a decisive Spirit Shackle ghost move or a supporting Hisuian Decidueye with a defense-dropping Triple Arrows fighting move!
+Rowlett is a Grass/Flying Physical Pokémon that costs $3,599.
 
 pokemon10
-Oshawott is a Water Physical and Special Pokémon that helps protect your health from the enemy's lucky critical hits. It uses its water to move up close and defeat its enemies, then branches out into an Unovan Samurott with a powerful Megahorn or a trap-setting Hisuian Samurott with Ceaseless Edge! Hisuian Samurott can be paired with Sharpness Pokémon to further enhance its abilities.
+Oshawott is a Water Physical and Special Pokémon that costs $4,884.
 
 pokemon20
-Cyndaquil is a Fire Special Pokémon that completely reduces your fire damage taken and boosts its already consequential special moves when there are fire enemies around. It branches out to an Unovan Typhlosion with a very deadly but slow Eruption attack that depends on your current health or a Hisuian Typhlosion that burns and doubles all of its damage!
+Cyndaquil is a Fire Special Pokémon that costs $4,884.
 
 pokemon01
-Oddish is a Grass/Poison Special Pokémon that is the only healer you'll ever need. It not only heals you every time it attacks but also poisons your enemies over time. Evolve it into an Effect Spore Vileplume for even more serious poison damage, sleep, and paralysis, or evolve it into Bellossom with Giga Drain to keep you always at full health.
+Oddish is a Grass/Poison Special Pokémon that is a WIP.
 
 pokemon11
-Poliwag is a Water Physical and Special Pokémon that heals you after taking out Water-type Pokémon. It uses ranged water moves that eventually can slow down your enemies. Evolve it into Poliwrath for a mighty close-range Dynamic Punch with the ability to boost it even further at the cost of some health, or evolve it into Politoed to strengthen all your water types!
+Poliwag is a Water Physical and Special Pokémon that is a WIP.
 
 pokemon21
-Slowpoke is a Water/Psychic Physical and Special Pokémon that is lazy but can put your enemies to sleep and confuse them. Evolve it into Slowbro to have a physical psychic Zen Headbutt with strong physical defense or Slowking to have a slow, powerful special psychic attack Future Sight with strong special defense.
+Slowpoke is a Water/Psychic Physical and Special Pokémon that is a WIP.
 
 pokemon02
-Scyther is a Bug/Flying Physical Pokémon that Fury Cutters very fast and constantly chooses to improve its stats. Evolve it into a Scizor for a stronger and even quicker Bullet Punch or into a Kleavor to set up some Stone Axe traps that are very deadly to those weak to Rock! Kleavor can be paired with Sharpness Pokémon to enhance its abilities further.
+Scyther is a Bug/Flying Physical Pokémon that is a WIP.
 
 pokemon12
-Exeggcute is a Grass/Psychic Special Pokémon that plants Leech Seeds slowly takes down their opponents, and gives your Pokémon berries over time. Evolving into either Kanto Exeggutor or Alolan Exeggutor allows it to release a powerful Grass or Dragon attack on your enemies.
+Exeggcute is a Grass/Psychic Special Pokémon that is a WIP.
 
 pokemon22
-Cubone is a Ground Physical Pokémon that uses multiple Bone attacks to attack enemies at various times. It is a Pokémon that can stack numerous attacks at once, creating a powerful AOE ground-attacking Kanto Marowak or a dual ground and ghost defense shattering Alolan Marowak.
+Cubone is a Ground Physical Pokémon that is a WIP.
 
 pokemon03
-Koffing is a Poison Special Pokémon that Levitates so it can be placed with Flying, Water, and Grass Pokémon. It utilizes Poison status conditions to lower enemy health over time gradually. Evolve it into Kanto Weezing to reduce the enemy's damage, or send in Galarian Weezing to use fairy moves to confuse your enemies.
+Koffing is a Poison Special Pokémon that is a WIP.
 
 pokemon13
-Eevee is a Normal Physical and Special Pokémon that can only evolve into Espeon or Umbreon. Despite that, Eevee can lower your enemy's physical damage drastically. Bring Espeon to use Psychic to weaken your enemies even more and resist both Physical and Special moves, or evolve it to Umbreon to watch your health not even go down from Physical moves and strike back with a Foul Play.
+Eevee is a Normal Physical and Special Pokémon that is a WIP.
 
 pokemon23
 Pichu is an Electric Pokémon that is a WIP.
