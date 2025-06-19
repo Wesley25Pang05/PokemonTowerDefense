@@ -57,7 +57,7 @@ export class Oshawott extends Phaser.GameObjects.Image {
         }
       });
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Water", 22.68);
+        takeDamage((enemy as any), scene, "Water", "Special", 22.68, 1/24);
         projectile.destroy();
     });
     const updateHandler = () => {

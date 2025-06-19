@@ -194,12 +194,19 @@ export function dealDamage(amount: number, atk: number, spatk: number, cave: boo
   }
 }
 
-export function takeDamage(enemy: Phaser.GameObjects.PathFollower, scene: Phaser.Scene, type: string, amount: number) {
-  const data = enemy as any;
+export function takeDamage(enemy: Phaser.GameObjects.PathFollower, scene: Phaser.Scene, type: string, category: string, amount: number, cc: number) {
+  const data = enemy as any; const cd = cc > Math.random() ? 1.5 : 1;
   const dmgEFF = effectiveness(type, (enemy as any).typeOne, (enemy as any).typeTwo);
-  let dmgTotal = Math.ceil((amount * dmgEFF) / data.defense);
+  const defenseCategory = category == "Physical" ? data.defense : data.specialdef;
+  let dmgTotal = Math.ceil((amount * dmgEFF * cd) / defenseCategory);
+  if (data.health < dmgTotal) {
+    award(data.health);
+  }
+  else {
+    award(dmgTotal);
+  }
   data.health -= dmgTotal;
-  showDamageText(scene, enemy.x, enemy.y, dmgTotal, dmgEFF);
+  showDamageText(scene, enemy.x, enemy.y, dmgTotal, dmgEFF, cd > 1);
 
   if (data.health <= 0) {
     enemy.destroy();
@@ -241,10 +248,10 @@ function effectiveness(type: string, typeOne: string, typeTwo: string) {
     [1, 0.625, 1, 1, 1, 1, 1.6, 0.625, 1, 1, 1, 1, 1, 1, 1.6, 1.6, 0.625, 1]
   ]
   let typeInt = typeList.indexOf(type); let typeIntOne = typeList.indexOf(typeOne); let typeIntTwo = typeList.indexOf(typeTwo);
-  let multiplier = typeChart[typeInt][typeIntOne]; multiplier *= typeIntTwo != -1 ? typeChart[typeInt][typeIntTwo] : multiplier; return multiplier;
+  let multiplier = typeChart[typeInt][typeIntOne]; multiplier *= typeIntTwo != -1 ? typeChart[typeInt][typeIntTwo] : 1; return multiplier;
 }
 
-function showDamageText(scene: Phaser.Scene, x: number, y: number, damage: number, eff: number) {
+function showDamageText(scene: Phaser.Scene, x: number, y: number, damage: number, eff: number, cd: boolean) {
   let color = '#ffffff';
   if (eff < 0.5) {
     color = '#00008B';
@@ -258,7 +265,8 @@ function showDamageText(scene: Phaser.Scene, x: number, y: number, damage: numbe
   else if (eff > 1.1) {
     color = '#FF0000';
   }
-  const text = scene.add.text(x, y, damage.toString(), {
+  const showCrit = cd ? "💥" : ""
+  const text = scene.add.text(x, y, damage.toString() + showCrit, {
     fontSize: '14px',
     color: `${color}`,
     stroke: '#000000',

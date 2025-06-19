@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { enemies, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
-export class Rowlett extends Phaser.GameObjects.Image {
+export class Rowlet extends Phaser.GameObjects.Image {
   private range: number = 1000;
   private shootTimer?: Phaser.Time.TimerEvent;
 
@@ -52,7 +52,7 @@ export class Rowlett extends Phaser.GameObjects.Image {
       .setDepth(1);
       scene.physics.moveToObject(projectile, target, 800);
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Grass", 88);
+        takeDamage((enemy as any), scene, "Grass", "Physical", 88, 1/24);
         projectile.destroy();
       });
       const updateHandler = () => {
@@ -68,5 +68,9 @@ export class Rowlett extends Phaser.GameObjects.Image {
       };
 
     scene.events.on('update', updateHandler);
+  }
+
+  public static rowletUpgrade() {
+    
   }
 }

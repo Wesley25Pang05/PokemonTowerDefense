@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { paths, startRound, area } from './round';
-import { Rowlett } from './towers/Rowlett'
+import { Rowlet } from './towers/Rowlet'
 import { Oshawott } from './towers/Oshawott';
 import { Cyndaquil } from './towers/Cyndaquil';
 
@@ -81,9 +81,10 @@ function preload(this: Phaser.Scene) {
 
 export let enemiesGroup: Phaser.Physics.Arcade.Group;
 const descriptionMap: Record<string, string> = {};
+const statsMap: Record<string, string> = {};
 let playerHealth = 0; let currentHealth = 0;
 let playerDef = 0; let playerSpDef = 0;
-let playerEXP = 5000;
+let playerEXP = 50000;
 
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
@@ -92,10 +93,11 @@ function create(this: Phaser.Scene) {
   if (text) {
     const lines = text.split('\n').map((line: string) => line.trim()).filter(Boolean);
 
-    for (let i = 0; i < lines.length - 1; i += 2) {
+    for (let i = 0; i < lines.length - 1; i += 3) {
       const key = lines[i];
       const description = lines[i + 1];
       descriptionMap[key] = description;
+      statsMap[key] = lines[i + 2];
     }
   }
 
@@ -104,9 +106,9 @@ function create(this: Phaser.Scene) {
       const x = 20 + c * 60;
       const y = 500 + r * 60;
       const typeList = [
-        [["Gra", "Fly"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"]],
-        [["Wat", "Wat"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"]],
-        [["Fir", "Fir"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"], ["WIP", "WIP"]]
+        [["Gra", "Fly"], ["Gra", "Poi"], ["Bug", "Fly"], ["Poi", "Non"], ["Psy", "Fai"], ["Psy", "Fai"], ["Wat", "Non"], ["Nor", "Fly"], ["Psy", "Non"], ["Roc", "Non"]],
+        [["Wat", "Wat"], ["Wat", "Non"], ["Gra", "Psy"], ["Nor", "Non"], ["Fig", "Non"], ["Bug", "Gro"], ["Bug", "Non"], ["Dra", "Non"], ["Gra", "Dra"], ["Ele", "Poi"]],
+        [["Fir", "Fir"], ["Wat", "Psy"], ["Gro", "Non"], ["Ele", "Non"], ["Bug", "Non"], ["Ice", "Non"], ["Gra", "Non"], ["Ice", "Non"], ["Fir", "Non"], ["Fig", "Non"]]
       ]
       const typeOne = typeList[r][c][0]; const typeTwo = typeList[r][c][1];
       const button = this.add.image(x, y, `pokemon${r}${c}`).setOrigin(0, 0)
@@ -117,9 +119,9 @@ function create(this: Phaser.Scene) {
       button.on('dragend', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image) => {
         let placed = false;
         const cost = [
-          [3599, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999],
-          [4884, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999],
-          [4884, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999]
+          [3200, 3200, 5000, 3400, 3100, 1980, 3450, 3500, 10000, 2800],
+          [3080, 3000, 3250, 3250, 2100, 2660, 2240, 6000, 2600, 2420],
+          [3090, 3150, 3200, 2050, 1950, 3000, 2800, 3040, 2550, 19250]
         ]
         for (const slot of placementSlots) {
           const bounds = slot.container.getBounds();
@@ -148,7 +150,7 @@ function create(this: Phaser.Scene) {
         break;
       case 2:
         button.on('pointerdown', () => {
-          startRound(this);
+          if (currentHealth > 0) startRound(this);
         });
     }
   }
@@ -227,12 +229,18 @@ function showPopup(scene: Phaser.Scene, r: number, c: number, pokemon: string) {
   popupContainer.add(background);
 
   const description = descriptionMap[pokemon] ?? 'No description available.';
+  const stat = statsMap[pokemon] ?? 'No description available.';
   const label = scene.add.text(boxX + 20, boxY + 10, description, {
     fontSize: '20px',
     color: '#ffffff',
     wordWrap: { width: 650 }
   });
-  popupContainer.add(label);
+  const stats = scene.add.text(boxX + 20, boxY + 150, stat, {
+    fontSize: '20px',
+    color: '#ffffff',
+    wordWrap: { width: 650 }
+  });
+  popupContainer.add(stats);
   const pokemonKeys = [`pokemon${r}${c}0`, `pokemon${r}${c}1`, `pokemon${r}${c}2`];
 
   for (let i = 0; i < 3; i++) {
@@ -263,27 +271,164 @@ function placeTower(scene: Phaser.Scene, x: number, y: number, key: string): Pha
 
   switch (key) {
     case "pokemon00":
-      tower = new Rowlett(scene, x, y).setDisplaySize(50, 50).setOrigin(0.5);
+      tower = new Rowlet(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5).setInteractive();
       playerHealth += 68; playerDef += 11; playerSpDef += 10;
       updateHealth(68, true);
+      tower.on('pointerdown', () => {
+        Rowlet.rowletUpgrade();
+      });
       break;
     case "pokemon10":
-      tower = new Oshawott(scene, x, y).setDisplaySize(50, 50).setOrigin(0.5);
+      tower = new Oshawott(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 55; playerDef += 9; playerSpDef += 9;
       updateHealth(55, true);
       break;
     case "pokemon20":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(50, 50).setOrigin(0.5);
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 39; playerDef += 8.6; playerSpDef += 10;
       updateHealth(39, true);
       break;
+    case "pokemon01":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 45; playerDef += 11; playerSpDef += 13;
+      updateHealth(45, true);
+      break;
+    case "pokemon11":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 40; playerDef += 8; playerSpDef += 8;
+      updateHealth(40, true);
+      break;
+    case "pokemon21":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 90; playerDef += 13; playerSpDef += 8;
+      updateHealth(90, true);
+      break;
+    case "pokemon02":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 70; playerDef += 16; playerSpDef += 16;
+      updateHealth(70, true);
+      break;
+    case "pokemon12":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 60; playerDef += 16; playerSpDef += 9;
+      updateHealth(60, true);
+      break;
+    case "pokemon22":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 50; playerDef += 19; playerSpDef += 10;
+      updateHealth(50, true);
+      break;
+    case "pokemon03":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 40; playerDef += 19; playerSpDef += 9;
+      updateHealth(40, true);
+      break;
+    case "pokemon13":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 55; playerDef += 10; playerSpDef += 13;
+      updateHealth(55, true);
+      break;
+    case "pokemon23":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 20; playerDef += 3; playerSpDef += 7;
+      updateHealth(20, true);
+      break;
+    case "pokemon04":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 20; playerDef += 9; playerSpDef += 18;
+      updateHealth(20, true);
+      break;
+    case "pokemon14":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 35; playerDef += 7; playerSpDef += 7;
+      updateHealth(35, true);
+      break;
+    case "pokemon24":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 45; playerDef += 7; playerSpDef += 6;
+      updateHealth(45, true);
+      break;
+    case "pokemon05":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 28; playerDef += 5; playerSpDef += 7;
+      updateHealth(28, true);
+      break;
+    case "pokemon15":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 31; playerDef += 18; playerSpDef += 6;
+      updateHealth(31, true);
+      break;
+    case "pokemon25":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 50; playerDef += 10; playerSpDef += 10;
+      updateHealth(50, true);
+      break;
+    case "pokemon06":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 35; playerDef += 17; playerSpDef += 11;
+      updateHealth(35, true);
+      break;
+    case "pokemon16":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 40; playerDef += 9; playerSpDef += 9;
+      updateHealth(40, true);
+      break;
+    case "pokemon26":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 45; playerDef += 10; playerSpDef += 10;
+      updateHealth(45, true);
+      break;
+    case "pokemon07":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 70; playerDef += 10; playerSpDef += 10;
+      updateHealth(70, true);
+      break;
+    case "pokemon17":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 45; playerDef += 7; playerSpDef += 15;
+      updateHealth(45, true);
+      break;
+    case "pokemon27":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 55; playerDef += 17; playerSpDef += 7;
+      updateHealth(55, true);
+      break;
+    case "pokemon08":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 43; playerDef += 6.2; playerSpDef += 6.2;
+      updateHealth(43, true);
+      break;
+    case "pokemon18":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 40; playerDef += 16; playerSpDef += 8;
+      updateHealth(40, true);
+      break;
+    case "pokemon28":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 40; playerDef += 8; playerSpDef += 8;
+      updateHealth(40, true);
+      break;
+    case "pokemon09":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 45; playerDef += 8; playerSpDef += 8;
+      updateHealth(45, true);
+      break;
+    case "pokemon19":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 40; playerDef += 7; playerSpDef += 7;
+      updateHealth(40, true);
+      break;
+    case "pokemon29":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      playerHealth += 60; playerDef += 12; playerSpDef += 10;
+      updateHealth(60, true);
+      break;
   }
-
   return tower;
 }
 
 export function award(exp: integer) {
-  playerEXP += exp * 2;
+  playerEXP += exp;
   healthLabel.setText(`❤️${currentHealth}   ⛊${Math.round(playerDef)}   ⛉${Math.round(playerSpDef)}   💰${Math.round(playerEXP)}`);
 }
 

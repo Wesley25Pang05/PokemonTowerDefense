@@ -57,7 +57,7 @@ export class Cyndaquil extends Phaser.GameObjects.Image {
         }
       });
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Fire", 28.8);
+        takeDamage((enemy as any), scene, "Fire", "Special", 28.8, 1/24);
         statusPossibility((enemy as any), "Burn", 0.1);
         projectile.destroy();
     });

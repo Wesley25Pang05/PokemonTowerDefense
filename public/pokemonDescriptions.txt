@@ -1,89 +1,119 @@
 pokemon00
-Rowlett is a Grass/Flying Physical Pokémon that costs $3,599.
+Rowlet is a Grass/Flying Pokémon that costs $3,200. It uses it's Long Reach with Leafage for powerful damage.
+❤️68 ⛊11 ⛉10 🏹1000 ⚔️2.000s 🥊88
 
 pokemon10
-Oshawott is a Water Physical and Special Pokémon that costs $4,884.
+Oshawott is a Water Pokémon that costs $3,080. It shoots a Water Gun up close for fast deadly damage.
+❤️55 ⛊9 ⛉9 🏹150 ⚔️0.300s ✨22.68
 
 pokemon20
-Cyndaquil is a Fire Special Pokémon that costs $4,884.
+Cyndaquil is a Fire Pokémon that costs $3,090. It Embers it's opponents to deal Burn damage.
+❤️39 ⛊8.6 ⛉10 🏹400 ⚔️0.600s ✨28.8 🔥1/16
 
 pokemon01
-Oddish is a Grass/Poison Special Pokémon that is a WIP.
+Oddish is a Grass/Poison Pokémon that costs $3,200.
+❤️45 ⛊11 ⛉13 🏹0 ⚔️0s ✨🥊0
 
 pokemon11
-Poliwag is a Water Physical and Special Pokémon that is a WIP.
+Poliwag is a Water Pokémon that costs $3,000.
+❤️40 ⛊8 ⛉8 🏹0 ⚔️0s ✨🥊0
 
 pokemon21
-Slowpoke is a Water/Psychic Physical and Special Pokémon that is a WIP.
+Slowpoke is a Water/Psychic Pokémon that costs $3,150.
+❤️90 ⛊13 ⛉8 🏹0 ⚔️0s ✨🥊0
 
 pokemon02
-Scyther is a Bug/Flying Physical Pokémon that is a WIP.
+Scyther is a Bug/Flying Pokémon that costs $5,000.
+❤️70 ⛊16 ⛉16 🏹0 🥊0s ⚔️0
 
 pokemon12
-Exeggcute is a Grass/Psychic Special Pokémon that is a WIP.
+Exeggcute is a Grass/Psychic Pokémon that costs $3,250.
+❤️60 ⛊16 ⛉9 🏹0 🥊0s ⚔️0
 
 pokemon22
-Cubone is a Ground Physical Pokémon that is a WIP.
+Cubone is a Ground Pokémon that costs $3,200.
+❤️50 ⛊19 ⛉10 🏹0 🥊0s ⚔️0
 
 pokemon03
-Koffing is a Poison Special Pokémon that is a WIP.
+Koffing is a Poison Pokémon that costs $3,400.
+❤️40 ⛊19 ⛉9 🏹0 🥊0s ⚔️0
 
 pokemon13
-Eevee is a Normal Physical and Special Pokémon that is a WIP.
+Eevee is a Normal Pokémon that costs $3,250.
+❤️55 ⛊10 ⛉13 🏹0 🥊0s ⚔️0
 
 pokemon23
-Pichu is an Electric Pokémon that is a WIP.
+Pichu is an Electric Pokémon that costs $2,050.
+❤️20 ⛊3 ⛉7 🏹0 🥊0s ⚔️0
 
 pokemon04
-Mime Jr. is a Psychic/Fairy Pokémon that is a WIP.
+Mime Jr. is a Psychic/Fairy Pokémon that costs $3,100.
+❤️20 ⛊9 ⛉18 🏹0 🥊0s ⚔️0
 
 pokemon14
-Tyrogue is a Fighting Pokémon that is a WIP.
+Tyrogue is a Fighting Pokémon that costs $2,100.
+❤️35 ⛊7 ⛉7 🏹0 🥊0s ⚔️0
 
 pokemon24
-Wurmple is a Bug Pokémon that is a WIP.
+Wurmple is a Bug Pokémon that costs $1,950.
+❤️45 ⛊7 ⛉6 🏹0 ⚔️0s ✨🥊0
 
 pokemon05
-Ralts is a Psychic/Fairy Pokémon that is a WIP.
+Ralts is a Psychic/Fairy Pokémon that costs $1,980.
+❤️28 ⛊5 ⛉7 🏹0 ⚔️0s ✨🥊0
 
 pokemon15
-Nincada is a Bug/Ground Pokémon that is a WIP.
+Nincada is a Bug/Ground Pokémon that costs $2,660.
+❤️31 ⛊18 ⛉6 🏹0 ⚔️0s ✨🥊0
 
 pokemon25
-Snorunt is an Ice Pokémon that is a WIP.
+Snorunt is an Ice Pokémon that costs $3,000.
+❤️50 ⛊10 ⛉10 🏹0 ⚔️0s ✨🥊0
 
 pokemon06
-Clamperl is a Water Pokémon that is a WIP.
+Clamperl is a Water Pokémon that costs $3,450.
+❤️35 ⛊17 ⛉11 🏹0 ⚔️0s ✨🥊0
 
 pokemon16
-Burmy is a Bug Pokémon that is a WIP.
+Burmy is a Bug Pokémon that costs $2,240.
+❤️40 ⛊9 ⛉9 🏹0 ⚔️0s ✨🥊0
 
 pokemon26
-Petilil is a Grass Pokémon that is a WIP.
+Petilil is a Grass Pokémon that costs $2,800.
+❤️45 ⛊10 ⛉10 🏹0 ⚔️0s ✨🥊0
 
 pokemon07
-Rufflet is a Normal/Flying Pokémon that is a WIP.
+Rufflet is a Normal/Flying Pokémon that costs $3,500.
+❤️70 ⛊10 ⛉10 🏹0 ⚔️0s ✨🥊0
 
 pokemon17
-Goomy is a Dragon Pokémon that is a WIP.
+Goomy is a Dragon Pokémon that costs $6,000.
+❤️45 ⛊7 ⛉15 🏹0 ⚔️0s ✨🥊0
 
 pokemon27
-Bergmite is an Ice Pokémon that is a WIP.
+Bergmite is an Ice Pokémon that costs $3,040.
+❤️55 ⛊17 ⛉7 🏹0 ⚔️0s ✨🥊0
 
 pokemon08
-Cosmog is a Psychic Pokémon that is a WIP.
+Cosmog is a Psychic Pokémon that costs $10,000.
+❤️43 ⛊6.2 ⛉6.2 🏹0 ⚔️0s ✨🥊0
 
 pokemon18
-Applin is a Grass/Dragon Pokémon that is a WIP.
+Applin is a Grass/Dragon Pokémon that costs $2,600.
+❤️40 ⛊16 ⛉8 🏹0 ⚔️0s ✨🥊0
 
 pokemon28
-Charcadet is a Fire Pokémon that is a WIP.
+Charcadet is a Fire Pokémon that costs $2,550.
+❤️40 ⛊8 ⛉8 🏹0 ⚔️0s ✨🥊0
 
 pokemon09
-Rockruff is a Rock Pokémon that is a WIP.
+Rockruff is a Rock Pokémon that costs $2,800.
+❤️45 ⛊8 ⛉8 🏹0 ⚔️0s ✨🥊0
 
 pokemon19
-Toxel is an Electric/Poison Pokémon that is a WIP.
+Toxel is an Electric/Poison Pokémon that costs $2,420.
+❤️40 ⛊7 ⛉7 🏹0 ⚔️0s ✨🥊0
 
 pokemon29
-Kubfu is a Fighting Pokémon that is a WIP.
+Kubfu is a Fighting Pokémon that costs $19,250.
+❤️60 ⛊12 ⛉10 🏹0 ⚔️0s ✨🥊0
