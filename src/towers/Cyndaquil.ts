@@ -12,7 +12,7 @@ export class Cyndaquil extends Phaser.GameObjects.Image {
     y: number,
   ) {
     super(scene, x, y, 'pokemon20');
-    this.setDisplaySize(50, 50).setOrigin(0.5);
+    this.setOrigin(0.5);
     scene.add.existing(this);
 
     this.startAttacking(scene);
@@ -67,7 +67,7 @@ export class Cyndaquil extends Phaser.GameObjects.Image {
         return;
       }
 
-      if (projectile.y > 480) {
+      if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
         projectile.destroy();
         scene.events.off('update', updateHandler);
       }

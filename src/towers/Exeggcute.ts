@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
-import { enemies, takeDamage, } from '../round';
-import { enemiesGroup } from '../index';
+import { enemies, statusPossibility, takeDamage, } from '../round';
+import { enemiesGroup, updateHealth } from '../index';
 
-export class Rowlet extends Phaser.GameObjects.Image {
-  private range: number = 1000;
+export class Exeggcute extends Phaser.GameObjects.Image {
+  private range: number = 250;
   private shootTimer?: Phaser.Time.TimerEvent;
 
   constructor(
@@ -11,7 +11,7 @@ export class Rowlet extends Phaser.GameObjects.Image {
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon00');
+    super(scene, x, y, 'pokemon12');
     this.setOrigin(0.5);
     scene.add.existing(this);
 
@@ -20,7 +20,7 @@ export class Rowlet extends Phaser.GameObjects.Image {
 
   private startAttacking(scene: Phaser.Scene) {
     this.shootTimer = scene.time.addEvent({
-      delay: 2000,
+      delay: 1000,
       loop: true,
       callback: () => {
         const target = this.findNearestEnemy();
@@ -47,30 +47,32 @@ export class Rowlet extends Phaser.GameObjects.Image {
   }
 
   private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
-    const projectile = scene.physics.add.image(this.x, this.y, 'projectile0')
+    const projectile = scene.physics.add.image(target.x, target.y, 'projectile3')
       .setDisplaySize(16, 16)
       .setDepth(1);
-      scene.physics.moveToObject(projectile, target, 800);
-      scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Grass", "Physical", 88, 1/24);
-        projectile.destroy();
-      });
-      const updateHandler = () => {
-        if (!projectile.active) {
-          scene.events.off('update', updateHandler);
-          return;
-        }
-
-        if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
+      scene.physics.moveToObject(projectile, this, 100);
+      scene.time.delayedCall(3000, () => {
+        if (projectile && projectile.active) {
           projectile.destroy();
-          scene.events.off('update', updateHandler);
         }
-      };
+      });
+      const healing = Math.round(takeDamage(target, scene, "Grass", "Special", 24, 1/24) / 2);
+      scene.physics.add.overlap(projectile, this, (proj) => {
+        updateHealth(healing, true);
+        projectile.destroy();
+    });
+    const updateHandler = () => {
+      if (!projectile.active) {
+        scene.events.off('update', updateHandler);
+        return;
+      }
+
+      if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
+        projectile.destroy();
+        scene.events.off('update', updateHandler);
+      }
+    };
 
     scene.events.on('update', updateHandler);
-  }
-
-  public static rowletUpgrade() {
-    
   }
 }

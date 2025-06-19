@@ -1,17 +1,19 @@
 import Phaser from 'phaser';
-import { enemies, takeDamage, } from '../round';
+import { enemies, statusPossibility, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
-export class Oshawott extends Phaser.GameObjects.Image {
-  private range: number = 150;
+export class Pichu extends Phaser.GameObjects.Image {
+  private range: number = 600;
   private shootTimer?: Phaser.Time.TimerEvent;
+  private static egg: number = 0;
+  private static thundershock: boolean = false;
 
   constructor(
     scene: Phaser.Scene,
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon10');
+    super(scene, x, y, 'Egg');
     this.setOrigin(0.5);
     scene.add.existing(this);
 
@@ -20,12 +22,16 @@ export class Oshawott extends Phaser.GameObjects.Image {
 
   private startAttacking(scene: Phaser.Scene) {
     this.shootTimer = scene.time.addEvent({
-      delay: 300,
+      delay: 1600,
       loop: true,
       callback: () => {
         const target = this.findNearestEnemy();
-        if (target) {
-          this.shoot(scene, target);
+        if (Pichu.egg == -1) {
+          Pichu.egg = -2;
+          this.setTexture("pokemon23");
+        }
+        else if (target && Pichu.thundershock) {
+          this.shoot(scene, target, -20);
         }
       }
     });
@@ -46,18 +52,24 @@ export class Oshawott extends Phaser.GameObjects.Image {
     return closestEnemy;
   }
 
-  private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
-    const projectile = scene.physics.add.image(this.x, this.y, 'projectile1')
-      .setDisplaySize(16, 16)
+  private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower, dy: number) {
+    const projectile = scene.physics.add.image(this.x, this.y, 'projectile6')
+      .setDisplaySize(24, 24)
       .setDepth(1);
-      scene.physics.moveToObject(projectile, target, 300);
-      scene.time.delayedCall(600, () => {
+      projectile.setVelocityY(dy);
+      scene.time.delayedCall(1200, () => {
         if (projectile && projectile.active) {
-          projectile.destroy();
+          scene.physics.moveToObject(projectile, target, 400);
+          scene.time.delayedCall(800, () => {
+            if (projectile && projectile.active) {
+              projectile.destroy();
+            }
+          });
         }
       });
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Water", "Special", 15.12, 1/24);
+        takeDamage((enemy as any), scene, "Electric", "Special", 33.6, 1/24);
+        statusPossibility((enemy as any), "Paralysis", 0.1);
         projectile.destroy();
     });
     const updateHandler = () => {
@@ -73,5 +85,15 @@ export class Oshawott extends Phaser.GameObjects.Image {
     };
 
     scene.events.on('update', updateHandler);
+  }
+
+  public static hatch() {
+    if (this.egg > 1) {
+      this.egg = -1;
+      this.thundershock = true;
+    }
+    else if (this.egg >= 0) {
+      this.egg += 0.1;
+    }
   }
 }

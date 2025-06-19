@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { award, changeLabel, enemiesGroup, updateHealth } from './index';
+import { Pichu } from './towers/Pichu';
 
 export let area = "Pallet Town";
 export let enemies: Phaser.GameObjects.PathFollower[] = [];
@@ -216,11 +217,34 @@ export function takeDamage(enemy: Phaser.GameObjects.PathFollower, scene: Phaser
         changeArea(scene);
     }
   }
+
+  return dmgTotal;
 }
 
 export function statusPossibility(en: Phaser.GameObjects.PathFollower, possibleStatus: string, possibility: number) {
   const statusConfirmed = (en as any).status == "None" && Math.random() < possibility;
   (en as any).status = statusConfirmed ? possibleStatus : (en as any).status;
+  switch ((en as any).status) {
+    case "Burn":
+      (en as any).status = (en as any).typeOne == "Fire" || (en as any).typeTwo == "Fire" ? "None" : (en as any).status;
+      break;
+    case "Freeze":
+      (en as any).status = (en as any).typeOne == "Ice" || (en as any).typeTwo == "Ice" ? "None" : (en as any).status;
+      break;
+    case "Paralysis":
+      (en as any).status = (en as any).typeOne == "Electric" || (en as any).typeTwo == "Electric" ? "None" : (en as any).status;
+      (en as any).status = (en as any).typeOne == "Ground" || (en as any).typeTwo == "Ground" ? "None" : (en as any).status;
+      break;
+    case "Poison":
+    case "Badly Poison":
+      (en as any).status = (en as any).typeOne == "Poison" || (en as any).typeTwo == "Poison" ? "None" : (en as any).status;
+      break;
+    case "Sleep":
+      (en as any).status = (en as any).typeOne == "Grass" || (en as any).typeTwo == "Grass" ? "None" : (en as any).status;
+      break;
+    default:
+      break;
+  }
   (en as any).statusDelay = statusConfirmed ? 1000 : 0;
 }
 
@@ -266,7 +290,7 @@ function showDamageText(scene: Phaser.Scene, x: number, y: number, damage: numbe
     color = '#FF0000';
   }
   const showCrit = cd ? "💥" : ""
-  const text = scene.add.text(x, y, damage.toString() + showCrit, {
+  const text = scene.add.text(x - Math.random() * 50 + 25, y - Math.random() * 50 + 25, damage.toString() + showCrit, {
     fontSize: '14px',
     color: `${color}`,
     stroke: '#000000',
@@ -385,5 +409,6 @@ function changeArea(scene: Phaser.Scene) {
         updateHealth(0, true);
         areaIndex++;
     }
+    Pichu.hatch();
     changeLabel(area);
 }

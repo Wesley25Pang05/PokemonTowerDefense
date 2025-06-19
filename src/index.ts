@@ -3,6 +3,15 @@ import { paths, startRound, area } from './round';
 import { Rowlet } from './towers/Rowlet'
 import { Oshawott } from './towers/Oshawott';
 import { Cyndaquil } from './towers/Cyndaquil';
+import { Oddish } from './towers/Oddish';
+import { Poliwag } from './towers/Poliwag';
+import { Slowpoke } from './towers/Slowpoke';
+import { Scyther } from './towers/Scyther';
+import { Exeggcute } from './towers/Exeggcute';
+import { Cubone } from './towers/Cubone';
+import { Koffing } from './towers/Koffing';
+import { Eevee } from './towers/Eevee';
+import { Pichu } from './towers/Pichu';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -52,7 +61,7 @@ function preload(this: Phaser.Scene) {
   "Scyther", "Jynx", "Electabuzz", "Magmar", "Pinsir", "Tauros", "Magikarp",
   "Gyarados", "Lapras", "Ditto", "Eevee", "Vaporeon", "Jolteon", "Flareon",
   "Porygon", "Omanyte", "Omastar", "Kabuto", "Kabutops", "Aerodactyl", "Snorlax",
-  "Articuno", "Zapdos", "Moltres", "Dratini", "Dragonair", "Dragonite", "Mewtwo", "Mew"
+  "Articuno", "Zapdos", "Moltres", "Dratini", "Dragonair", "Dragonite", "Mewtwo", "Mew", "Egg"
 ];
   for (const name of kantoMons) {
     this.load.image(name, `assets/kanto/${name}.png`);
@@ -84,7 +93,7 @@ const descriptionMap: Record<string, string> = {};
 const statsMap: Record<string, string> = {};
 let playerHealth = 0; let currentHealth = 0;
 let playerDef = 0; let playerSpDef = 0;
-let playerEXP = 50000;
+let playerEXP = 4000;
 
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
@@ -289,47 +298,49 @@ function placeTower(scene: Phaser.Scene, x: number, y: number, key: string): Pha
       updateHealth(39, true);
       break;
     case "pokemon01":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Oddish(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      scene.physics.add.existing(tower);
       playerHealth += 45; playerDef += 11; playerSpDef += 13;
       updateHealth(45, true);
       break;
     case "pokemon11":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Poliwag(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 40; playerDef += 8; playerSpDef += 8;
       updateHealth(40, true);
       break;
     case "pokemon21":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Slowpoke(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 90; playerDef += 13; playerSpDef += 8;
       updateHealth(90, true);
       break;
     case "pokemon02":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Scyther(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 70; playerDef += 16; playerSpDef += 16;
       updateHealth(70, true);
       break;
     case "pokemon12":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Exeggcute(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      scene.physics.add.existing(tower);
       playerHealth += 60; playerDef += 16; playerSpDef += 9;
       updateHealth(60, true);
       break;
     case "pokemon22":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Cubone(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 50; playerDef += 19; playerSpDef += 10;
       updateHealth(50, true);
       break;
     case "pokemon03":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Koffing(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 40; playerDef += 19; playerSpDef += 9;
       updateHealth(40, true);
       break;
     case "pokemon13":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Eevee(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 55; playerDef += 10; playerSpDef += 13;
       updateHealth(55, true);
       break;
     case "pokemon23":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Pichu(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 20; playerDef += 3; playerSpDef += 7;
       updateHealth(20, true);
       break;
@@ -435,7 +446,15 @@ export function award(exp: integer) {
 export function updateHealth(heal: integer, special: boolean) {
   if (currentHealth >= 0) {
     const reduce = special ? playerSpDef : playerDef;
-    currentHealth = heal >= 0 ? playerHealth : currentHealth + Math.round(heal / reduce);
+    if (heal == 0) {
+      currentHealth = playerHealth;
+    }
+    else if (heal > 0) {
+      currentHealth += heal;
+    }
+    else {
+      currentHealth = Math.max(-1, currentHealth + Math.round(heal / reduce));
+    }
     healthLabel.setText(`❤️${currentHealth}   ⛊${Math.round(playerDef)}   ⛉${Math.round(playerSpDef)}   💰${Math.round(playerEXP)}`);
   }
 }

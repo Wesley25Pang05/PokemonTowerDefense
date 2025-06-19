@@ -2,8 +2,8 @@ import Phaser from 'phaser';
 import { enemies, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
-export class Rowlet extends Phaser.GameObjects.Image {
-  private range: number = 1000;
+export class Scyther extends Phaser.GameObjects.Image {
+  private range: number = 700;
   private shootTimer?: Phaser.Time.TimerEvent;
 
   constructor(
@@ -11,7 +11,7 @@ export class Rowlet extends Phaser.GameObjects.Image {
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon00');
+    super(scene, x, y, 'pokemon02');
     this.setOrigin(0.5);
     scene.add.existing(this);
 
@@ -20,7 +20,7 @@ export class Rowlet extends Phaser.GameObjects.Image {
 
   private startAttacking(scene: Phaser.Scene) {
     this.shootTimer = scene.time.addEvent({
-      delay: 2000,
+      delay: 5000,
       loop: true,
       callback: () => {
         const target = this.findNearestEnemy();
@@ -47,13 +47,21 @@ export class Rowlet extends Phaser.GameObjects.Image {
   }
 
   private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
-    const projectile = scene.physics.add.image(this.x, this.y, 'projectile0')
-      .setDisplaySize(16, 16)
+    this.setAlpha(0);
+    const projectile = scene.physics.add.image(this.x, this.y, 'pokemon02')
+      .setDisplaySize(this.displayWidth, this.displayHeight)
       .setDepth(1);
-      scene.physics.moveToObject(projectile, target, 800);
+      scene.physics.moveToObject(projectile, target, 500);
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Grass", "Physical", 88, 1/24);
-        projectile.destroy();
+        scene.physics.moveToObject(projectile, target, 250);
+        scene.time.delayedCall(500, () => {
+          if (projectile && projectile.active) {
+            takeDamage((enemy as any), scene, "Bug", "Physical", 220, 1/24);
+            takeDamage((enemy as any), scene, "Bug", "Physical", 220, 1/24);
+            this.setAlpha(1);
+            projectile.destroy();
+          }
+        });
       });
       const updateHandler = () => {
         if (!projectile.active) {
@@ -62,6 +70,7 @@ export class Rowlet extends Phaser.GameObjects.Image {
         }
 
         if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
+          this.setAlpha(1);
           projectile.destroy();
           scene.events.off('update', updateHandler);
         }
