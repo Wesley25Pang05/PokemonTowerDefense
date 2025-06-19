@@ -1,5 +1,8 @@
 import Phaser from 'phaser';
 import { paths, startRound, area } from './round';
+import { Rowlett } from './towers/Rowlett'
+import { Oshawott } from './towers/Oshawott';
+import { Cyndaquil } from './towers/Cyndaquil';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -9,6 +12,12 @@ const config: Phaser.Types.Core.GameConfig = {
     preload,
     create,
     update
+  },
+  physics: {
+    default: 'arcade',
+    arcade: {
+      debug: false
+    }
   }
 };
 
@@ -17,6 +26,7 @@ const game = new Phaser.Game(config);
 let path1: Phaser.Curves.Path;
 let path2: Phaser.Curves.Path;
 let areaLabel: Phaser.GameObjects.Text;
+let healthLabel: Phaser.GameObjects.Text;
 let enemies: Phaser.GameObjects.PathFollower[] = [];
 
 function preload(this: Phaser.Scene) {
@@ -47,6 +57,9 @@ function preload(this: Phaser.Scene) {
   for (const name of kantoMons) {
     this.load.image(name, `assets/kanto/${name}.png`);
   }
+  for (let p = 0; p < 100; p++) {
+    this.load.image("projectile" + p, `assets/projectiles/projectile${p}.png`)
+  }
   this.load.image('bg', 'hoenn3.png');
   this.load.text('pokemonDescriptions', 'pokemonDescriptions.txt')
   for (let r = 0; r < 3; r++) {
@@ -60,7 +73,10 @@ function preload(this: Phaser.Scene) {
   }
 }
 
+export let enemiesGroup: Phaser.Physics.Arcade.Group;
 const descriptionMap: Record<string, string> = {};
+let playerHealth = 0; let currentHealth = 0;
+let playerDef = 0; let playerSpDef = 0;
 
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
@@ -105,7 +121,8 @@ function create(this: Phaser.Scene) {
         });
     }
   }
-  paths(this);
+
+  enemiesGroup = this.physics.add.group();
 
   this.add.image(0, 0, 'bg')
   .setOrigin(0, 0)
@@ -115,6 +132,14 @@ function create(this: Phaser.Scene) {
     fontSize: '24px',
     fontFamily: 'Arial',
     backgroundColor: '#ff474C',
+    color: '#ffffff',
+    padding: { x: 2, y: 1 },
+  });
+  healthLabel = this.add.text(1225, 10, `❤️${currentHealth}`, {
+    fontSize: '24px',
+    fontFamily: 'Arial',
+    stroke: '#000000',
+    strokeThickness: 4,
     color: '#ffffff',
     padding: { x: 2, y: 1 },
   });
@@ -168,12 +193,30 @@ export function changeLabel(area: string) {
 }
 
 function placeTower(scene: Phaser.Scene, x: number, y: number, key: string) {
-  const tower = scene.add.image(x, y, key).setDisplaySize(50, 50).setOrigin(0, 0);
+  let tower = new Object();
   switch (key) {
     case "pokemon00":
-      scene.time.addEvent({
-        
-      });
+      tower = new Rowlett(scene, x, y).setDisplaySize(50, 50).setOrigin(0, 0);
+      playerHealth += 68; playerDef += 11; playerSpDef += 10;
+      updateHealth(68, true);
       break;
+    case "pokemon10":
+      tower = new Oshawott(scene, x, y).setDisplaySize(50, 50).setOrigin(0, 0);
+      playerHealth += 55; playerDef += 9; playerSpDef += 9;
+      updateHealth(55, true);
+      break;
+    case "pokemon20":
+      tower = new Cyndaquil(scene, x, y).setDisplaySize(50, 50).setOrigin(0, 0);
+      playerHealth += 39; playerDef += 8.6; playerSpDef += 10;
+      updateHealth(55, true);
+      break;
+  }
+}
+
+export function updateHealth(heal: integer, special: boolean) {
+  if (currentHealth >= 0) {
+    const reduce = special ? playerSpDef : playerDef;
+    currentHealth = heal >= 0 ? playerHealth : currentHealth + Math.round(heal / reduce);
+    healthLabel.setText(`❤️${currentHealth}   ⛊${Math.round(playerDef)}   ⛉${Math.round(playerSpDef)}`);
   }
 }
