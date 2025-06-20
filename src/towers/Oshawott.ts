@@ -5,6 +5,7 @@ import { enemiesGroup } from '../index';
 export class Oshawott extends Phaser.GameObjects.Image {
   private range: number = 150;
   private shootTimer?: Phaser.Time.TimerEvent;
+  private static roundsPassed: number = -1;
 
   constructor(
     scene: Phaser.Scene,
@@ -14,7 +15,7 @@ export class Oshawott extends Phaser.GameObjects.Image {
     super(scene, x, y, 'pokemon10');
     this.setOrigin(0.5);
     scene.add.existing(this);
-
+    Oshawott.roundsPassed++;
     this.startAttacking(scene);
   }
 
@@ -54,11 +55,13 @@ export class Oshawott extends Phaser.GameObjects.Image {
       scene.time.delayedCall(600, () => {
         if (projectile && projectile.active) {
           projectile.destroy();
+          scene.events.off('update', updateHandler);
         }
       });
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
         takeDamage((enemy as any), scene, "Water", "Special", 15.12, 1/24);
         projectile.destroy();
+        scene.events.off('update', updateHandler);
     });
     const updateHandler = () => {
       if (!projectile.active) {
@@ -73,5 +76,11 @@ export class Oshawott extends Phaser.GameObjects.Image {
     };
 
     scene.events.on('update', updateHandler);
+  }
+
+  public static updateRounds() {
+    if (this.roundsPassed != -1) {
+      this.roundsPassed++;
+    }
   }
 }

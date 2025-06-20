@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
-import { enemies, takeDamage, } from '../round';
+import { enemies, statusPossibility, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
-export class Slowpoke extends Phaser.GameObjects.Image {
-  private range: number = 200;
+export class Goomy extends Phaser.GameObjects.Image {
+  private range: number = 600;
   private shootTimer?: Phaser.Time.TimerEvent;
   private static roundsPassed: number = -1;
 
@@ -12,54 +12,43 @@ export class Slowpoke extends Phaser.GameObjects.Image {
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon21');
+    super(scene, x, y, 'pokemon17');
     this.setOrigin(0.5);
     scene.add.existing(this);
-    Slowpoke.roundsPassed++;
+    Goomy.roundsPassed++;
     this.startAttacking(scene);
   }
 
   private startAttacking(scene: Phaser.Scene) {
     this.shootTimer = scene.time.addEvent({
-      delay: 300,
+      delay: 600,
       loop: true,
       callback: () => {
-        const target = this.findNearestEnemy();
-        if (target) {
-          this.shoot(scene, target);
+        for (let db = 0; db < enemies.length; db++) {
+          const target = enemies[db];
+          const dist = Phaser.Math.Distance.Between(this.x, this.y, target.x, target.y);
+          if (target && dist < this.range) {
+            this.shoot(scene, target, enemies.length);
+          }
         }
       }
     });
   }
 
-  private findNearestEnemy(): Phaser.GameObjects.PathFollower | null {
-    let closestEnemy: Phaser.GameObjects.PathFollower | null = null;
-    let closestDistance = this.range;
-    for (const enemy of enemies) {
-      if (!enemy.active) continue;
-
-      const dist = Phaser.Math.Distance.Between(this.x, this.y, enemy.x, enemy.y);
-      if (dist < closestDistance) {
-        closestDistance = dist;
-        closestEnemy = enemy;
-      }
-    }
-    return closestEnemy;
-  }
-
-  private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
-    const projectile = scene.physics.add.image(this.x, this.y, 'projectile1')
+  private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower, curEnemies: number) {
+    const projectile = scene.physics.add.image(this.x, this.y, 'projectile9')
       .setDisplaySize(16, 16)
       .setDepth(1);
-      scene.physics.moveToObject(projectile, target, 300);
-      scene.time.delayedCall(600, () => {
+      scene.physics.moveToObject(projectile, target, 600);
+      scene.time.delayedCall(1500, () => {
         if (projectile && projectile.active) {
           projectile.destroy();
           scene.events.off('update', updateHandler);
         }
       });
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Water", "Special", 9.6, 1/24);
+        takeDamage((enemy as any), scene, "Dragon", "Special", 39.6 / Math.sqrt(curEnemies), 1/24);
+        statusPossibility((enemy as any), "Paralysis", 0.3);
         projectile.destroy();
         scene.events.off('update', updateHandler);
     });
@@ -68,7 +57,13 @@ export class Slowpoke extends Phaser.GameObjects.Image {
         scene.events.off('update', updateHandler);
         return;
       }
-
+      if (target.active) {
+        scene.physics.moveToObject(projectile, target, 600);
+      }
+      else {
+        projectile.setVelocity(0, 0);
+        projectile.setRotation(projectile.rotation - 0.5 + Math.random());
+      }
       if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
         projectile.destroy();
         scene.events.off('update', updateHandler);

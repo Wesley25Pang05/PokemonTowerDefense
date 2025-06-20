@@ -5,7 +5,7 @@ import { enemiesGroup } from '../index';
 export class Pichu extends Phaser.GameObjects.Image {
   private range: number = 600;
   private shootTimer?: Phaser.Time.TimerEvent;
-  private static egg: number = 0;
+  private static roundsPassed: number = -11;
   private static thundershock: boolean = false;
 
   constructor(
@@ -16,7 +16,7 @@ export class Pichu extends Phaser.GameObjects.Image {
     super(scene, x, y, 'Egg');
     this.setOrigin(0.5);
     scene.add.existing(this);
-
+    Pichu.roundsPassed++;
     this.startAttacking(scene);
   }
 
@@ -26,11 +26,10 @@ export class Pichu extends Phaser.GameObjects.Image {
       loop: true,
       callback: () => {
         const target = this.findNearestEnemy();
-        if (Pichu.egg == -1) {
-          Pichu.egg = -2;
+        if (Pichu.roundsPassed >= 0) {
           this.setTexture("pokemon23");
         }
-        else if (target && Pichu.thundershock) {
+        if (target && Pichu.thundershock) {
           this.shoot(scene, target, -20);
         }
       }
@@ -63,6 +62,7 @@ export class Pichu extends Phaser.GameObjects.Image {
           scene.time.delayedCall(800, () => {
             if (projectile && projectile.active) {
               projectile.destroy();
+              scene.events.off('update', updateHandler);
             }
           });
         }
@@ -71,13 +71,13 @@ export class Pichu extends Phaser.GameObjects.Image {
         takeDamage((enemy as any), scene, "Electric", "Special", 33.6, 1/24);
         statusPossibility((enemy as any), "Paralysis", 0.1);
         projectile.destroy();
+        scene.events.off('update', updateHandler);
     });
     const updateHandler = () => {
       if (!projectile.active) {
         scene.events.off('update', updateHandler);
         return;
       }
-
       if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
         projectile.destroy();
         scene.events.off('update', updateHandler);
@@ -87,13 +87,12 @@ export class Pichu extends Phaser.GameObjects.Image {
     scene.events.on('update', updateHandler);
   }
 
-  public static hatch() {
-    if (this.egg > 1) {
-      this.egg = -1;
+  public static updateRounds() {
+    if (this.roundsPassed == 0) {
       this.thundershock = true;
     }
-    else if (this.egg >= 0) {
-      this.egg += 0.1;
+    else if (this.roundsPassed > -11) {
+      this.roundsPassed++;
     }
   }
 }

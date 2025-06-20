@@ -2,8 +2,8 @@ import Phaser from 'phaser';
 import { enemies, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
-export class Rowlet extends Phaser.GameObjects.Image {
-  private range: number = 3000;
+export class Clamperl extends Phaser.GameObjects.Image {
+  private range: number = 150;
   private shootTimer?: Phaser.Time.TimerEvent;
   private static roundsPassed: number = -1;
 
@@ -12,16 +12,16 @@ export class Rowlet extends Phaser.GameObjects.Image {
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon00');
+    super(scene, x, y, 'pokemon06');
     this.setOrigin(0.5);
     scene.add.existing(this);
-    Rowlet.roundsPassed++;
+    Clamperl.roundsPassed++;
     this.startAttacking(scene);
   }
 
   private startAttacking(scene: Phaser.Scene) {
     this.shootTimer = scene.time.addEvent({
-      delay: 2000,
+      delay: 300,
       loop: true,
       callback: () => {
         const target = this.findNearestEnemy();
@@ -48,26 +48,32 @@ export class Rowlet extends Phaser.GameObjects.Image {
   }
 
   private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
-    const projectile = scene.physics.add.image(this.x, this.y, 'projectile0')
+    const projectile = scene.physics.add.image(this.x, this.y, 'projectile1')
       .setDisplaySize(16, 16)
       .setDepth(1);
-      scene.physics.moveToObject(projectile, target, 800);
-      scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Grass", "Physical", 88, 1/24);
-        projectile.destroy();
-        scene.events.off('update', updateHandler);
-      });
-      const updateHandler = () => {
-        if (!projectile.active) {
-          scene.events.off('update', updateHandler);
-          return;
-        }
-
-        if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
+      scene.physics.moveToObject(projectile, target, 300);
+      scene.time.delayedCall(600, () => {
+        if (projectile && projectile.active) {
           projectile.destroy();
           scene.events.off('update', updateHandler);
         }
-      };
+      });
+      scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
+        takeDamage((enemy as any), scene, "Water", "Special", 17.76, 1/24);
+        projectile.destroy();
+        scene.events.off('update', updateHandler);
+    });
+    const updateHandler = () => {
+      if (!projectile.active) {
+        scene.events.off('update', updateHandler);
+        return;
+      }
+
+      if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
+        projectile.destroy();
+        scene.events.off('update', updateHandler);
+      }
+    };
 
     scene.events.on('update', updateHandler);
   }

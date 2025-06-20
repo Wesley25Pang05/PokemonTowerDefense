@@ -5,6 +5,7 @@ import { enemiesGroup } from '../index';
 export class Koffing extends Phaser.GameObjects.Image {
   private range: number = 200;
   private shootTimer?: Phaser.Time.TimerEvent;
+  private static roundsPassed: number = -1;
 
   constructor(
     scene: Phaser.Scene,
@@ -14,7 +15,7 @@ export class Koffing extends Phaser.GameObjects.Image {
     super(scene, x, y, 'pokemon03');
     this.setOrigin(0.5);
     scene.add.existing(this);
-
+    Koffing.roundsPassed++;
     this.startAttacking(scene);
   }
 
@@ -60,6 +61,7 @@ export class Koffing extends Phaser.GameObjects.Image {
           scene.time.delayedCall(600, () => {
             if (projectile && projectile.active) {
               projectile.destroy();
+              scene.events.off('update', updateHandler);
             }
           });
         }
@@ -68,13 +70,13 @@ export class Koffing extends Phaser.GameObjects.Image {
         takeDamage((enemy as any), scene, "Poison", "Special", 14.4, 1/24);
         statusPossibility((enemy as any), "Poison", 0.4);
         projectile.destroy();
+        scene.events.off('update', updateHandler);
     });
     const updateHandler = () => {
       if (!projectile.active) {
         scene.events.off('update', updateHandler);
         return;
       }
-
       if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
         projectile.destroy();
         scene.events.off('update', updateHandler);
@@ -82,5 +84,11 @@ export class Koffing extends Phaser.GameObjects.Image {
     };
 
     scene.events.on('update', updateHandler);
+  }
+
+  public static updateRounds() {
+    if (this.roundsPassed != -1) {
+      this.roundsPassed++;
+    }
   }
 }

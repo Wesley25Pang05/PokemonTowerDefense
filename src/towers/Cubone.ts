@@ -5,6 +5,7 @@ import { enemiesGroup } from '../index';
 export class Cubone extends Phaser.GameObjects.Image {
   private range: number = 400;
   private shootTimer?: Phaser.Time.TimerEvent;
+  private static roundsPassed: number = -1;
 
   constructor(
     scene: Phaser.Scene,
@@ -14,7 +15,7 @@ export class Cubone extends Phaser.GameObjects.Image {
     super(scene, x, y, 'pokemon22');
     this.setOrigin(0.5);
     scene.add.existing(this);
-
+    Cubone.roundsPassed++;
     this.startAttacking(scene);
   }
 
@@ -62,6 +63,7 @@ export class Cubone extends Phaser.GameObjects.Image {
             takeDamage((enemy as any), scene, "Ground", "Physical", 50, 1/24);
             takeDamage((enemy as any), scene, "Ground", "Physical", 50, 1/24);
             projectile.destroy();
+            scene.events.off('update', updateHandler);
           }
         });
       });
@@ -80,7 +82,9 @@ export class Cubone extends Phaser.GameObjects.Image {
     scene.events.on('update', updateHandler);
   }
 
-  public static rowletUpgrade() {
-    
+  public static updateRounds() {
+    if (this.roundsPassed != -1) {
+      this.roundsPassed++;
+    }
   }
 }

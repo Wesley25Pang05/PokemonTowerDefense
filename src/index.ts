@@ -12,6 +12,24 @@ import { Cubone } from './towers/Cubone';
 import { Koffing } from './towers/Koffing';
 import { Eevee } from './towers/Eevee';
 import { Pichu } from './towers/Pichu';
+import { MimeJr } from './towers/MimeJr';
+import { Tyrogue } from './towers/Tyrogue';
+import { Wurmple } from './towers/Wurmple';
+import { Ralts } from './towers/Ralts';
+import { Nincada } from './towers/Nincada';
+import { Snorunt } from './towers/Snorunt';
+import { Clamperl } from './towers/Clamperl';
+import { Burmy } from './towers/Burmy';
+import { Petilil } from './towers/Petilil';
+import { Rufflet } from './towers/Rufflet';
+import { Goomy } from './towers/Goomy';
+import { Bergmite } from './towers/Bergmite';
+import { Cosmog } from './towers/Cosmog';
+import { Applin } from './towers/Applin';
+import { Charcadet } from './towers/Charcadet';
+import { Rockruff } from './towers/Rockruff';
+import { Toxel } from './towers/Toxel';
+import { Kubfu } from './towers/Kubfu';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -91,9 +109,9 @@ function preload(this: Phaser.Scene) {
 export let enemiesGroup: Phaser.Physics.Arcade.Group;
 const descriptionMap: Record<string, string> = {};
 const statsMap: Record<string, string> = {};
-let playerHealth = 0; let currentHealth = 0;
+let playerHealth = 0; export let currentHealth = 0;
 let playerDef = 0; let playerSpDef = 0;
-let playerEXP = 4000;
+let playerEXP = 25000;
 
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
@@ -128,9 +146,9 @@ function create(this: Phaser.Scene) {
       button.on('dragend', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image) => {
         let placed = false;
         const cost = [
-          [3200, 3200, 5000, 3400, 3100, 1980, 3450, 3500, 10000, 2800],
-          [3080, 3000, 3250, 3250, 2100, 2660, 2240, 6000, 2600, 2420],
-          [3090, 3150, 3200, 2050, 1950, 3000, 2800, 3040, 2550, 19250]
+          [2280, 2400, 3400, 2400, 2250, 1330, 2490, 2530, 10000, 1900],
+          [2080, 1600, 2450, 2250, 1400, 1960, 1590, 4200, 2000, 1640],
+          [1920, 2350, 2450, 1050, 1550, 2000, 2150, 2440, 1700, 13000]
         ]
         for (const slot of placementSlots) {
           const bounds = slot.container.getBounds();
@@ -211,8 +229,10 @@ function create(this: Phaser.Scene) {
     backgroundColor: '#ff474C',
     color: '#ffffff',
     padding: { x: 2, y: 1 },
+    stroke: '#000000',
+    strokeThickness: 4,
   });
-  healthLabel = this.add.text(1125, 10, `Place your starter Pokémon!`, {
+  healthLabel = this.add.text(1125, 10, `Place your starter Pokémon! 💰2500`, {
     fontSize: '24px',
     fontFamily: 'Arial',
     stroke: '#000000',
@@ -284,7 +304,7 @@ function placeTower(scene: Phaser.Scene, x: number, y: number, key: string): Pha
       playerHealth += 68; playerDef += 11; playerSpDef += 10;
       updateHealth(68, true);
       tower.on('pointerdown', () => {
-        Rowlet.rowletUpgrade();
+        
       });
       break;
     case "pokemon10":
@@ -345,92 +365,92 @@ function placeTower(scene: Phaser.Scene, x: number, y: number, key: string): Pha
       updateHealth(20, true);
       break;
     case "pokemon04":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new MimeJr(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 20; playerDef += 9; playerSpDef += 18;
       updateHealth(20, true);
       break;
     case "pokemon14":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Tyrogue(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 35; playerDef += 7; playerSpDef += 7;
       updateHealth(35, true);
       break;
     case "pokemon24":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Wurmple(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 45; playerDef += 7; playerSpDef += 6;
       updateHealth(45, true);
       break;
     case "pokemon05":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Ralts(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 28; playerDef += 5; playerSpDef += 7;
       updateHealth(28, true);
       break;
     case "pokemon15":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Nincada(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 31; playerDef += 18; playerSpDef += 6;
       updateHealth(31, true);
       break;
     case "pokemon25":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Snorunt(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 50; playerDef += 10; playerSpDef += 10;
       updateHealth(50, true);
       break;
     case "pokemon06":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Clamperl(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 35; playerDef += 17; playerSpDef += 11;
       updateHealth(35, true);
       break;
     case "pokemon16":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Burmy(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 40; playerDef += 9; playerSpDef += 9;
       updateHealth(40, true);
       break;
     case "pokemon26":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Petilil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 45; playerDef += 10; playerSpDef += 10;
       updateHealth(45, true);
       break;
     case "pokemon07":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Rufflet(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 70; playerDef += 10; playerSpDef += 10;
       updateHealth(70, true);
       break;
     case "pokemon17":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Goomy(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 45; playerDef += 7; playerSpDef += 15;
       updateHealth(45, true);
       break;
     case "pokemon27":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Bergmite(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 55; playerDef += 17; playerSpDef += 7;
       updateHealth(55, true);
       break;
     case "pokemon08":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Cosmog(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 43; playerDef += 6.2; playerSpDef += 6.2;
       updateHealth(43, true);
       break;
     case "pokemon18":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Applin(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 40; playerDef += 16; playerSpDef += 8;
       updateHealth(40, true);
       break;
     case "pokemon28":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Charcadet(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 40; playerDef += 8; playerSpDef += 8;
       updateHealth(40, true);
       break;
     case "pokemon09":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Rockruff(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 45; playerDef += 8; playerSpDef += 8;
       updateHealth(45, true);
       break;
     case "pokemon19":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Toxel(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 40; playerDef += 7; playerSpDef += 7;
       updateHealth(40, true);
       break;
     case "pokemon29":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Kubfu(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
       playerHealth += 60; playerDef += 12; playerSpDef += 10;
       updateHealth(60, true);
       break;

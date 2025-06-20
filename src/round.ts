@@ -1,12 +1,44 @@
 import Phaser from 'phaser';
-import { award, changeLabel, enemiesGroup, updateHealth } from './index';
+import { award, changeLabel, currentHealth, enemiesGroup, updateHealth } from './index';
 import { Pichu } from './towers/Pichu';
+import { Eevee } from './towers/Eevee';
+import { Koffing } from './towers/Koffing';
+import { Cubone } from './towers/Cubone';
+import { Exeggcute } from './towers/Exeggcute';
+import { Slowpoke } from './towers/Slowpoke';
+import { Scyther } from './towers/Scyther';
+import { Poliwag } from './towers/Poliwag';
+import { Oddish } from './towers/Oddish';
+import { Cyndaquil } from './towers/Cyndaquil';
+import { Oshawott } from './towers/Oshawott';
+import { Rowlet } from './towers/Rowlet';
+import { MimeJr } from './towers/MimeJr';
+import { Tyrogue } from './towers/Tyrogue';
+import { Wurmple } from './towers/Wurmple';
+import { Ralts } from './towers/Ralts';
+import { Nincada } from './towers/Nincada';
+import { Snorunt } from './towers/Snorunt';
+import { Clamperl } from './towers/Clamperl';
+import { Burmy } from './towers/Burmy';
+import { Petilil } from './towers/Petilil';
+import { Rufflet } from './towers/Rufflet';
+import { Goomy } from './towers/Goomy';
+import { Bergmite } from './towers/Bergmite';
+import { Cosmog } from './towers/Cosmog';
+import { Applin } from './towers/Applin';
+import { Charcadet } from './towers/Charcadet';
+import { Rockruff } from './towers/Rockruff';
+import { Toxel } from './towers/Toxel';
+import { Kubfu } from './towers/Kubfu';
 
 export let area = "Pallet Town";
 export let enemies: Phaser.GameObjects.PathFollower[] = [];
 let areaIndex = 0;
 let areaList = ["Route 1: Round 1/5", "Viridian City", "Route 2: Round 1/6", "Back to Viridian City for a break.",
-    "Viridian Forest: Round 1/11", "Pewter City: Gym Incoming", "Gym 1: Brock | Round 1/3", "Pewter City: Boulder Badge Acquired"];
+    "Viridian Forest: Round 1/11", "Pewter City: Gym Incoming", "Gym 1: Brock | Round 1/3", "Pewter City: Boulder Badge Acquired",
+    "Route 3: Round 1/13", "Back to Pewter City for a break.", "Mount Moon: Round 1/14", "Outside Mount Moon", "Route 4: Round 1/11",
+    "Cerulean City", "Route 24: Round 1/18", "Back to Cerulean City for a break", "Route 25: Round 1/20", "Cerulean City: Gym Incoming",
+    "Gym 1: Misty | Round 1/4"];
 let path1: Phaser.Curves.Path;
 let path2: Phaser.Curves.Path;
 let spawning = false;
@@ -73,6 +105,10 @@ function spawnEnemy(scene: Phaser.Scene, mon: String, type1: String, type2: Stri
   (enemy as any).defense = def;
   (enemy as any).specialatk = spa;
   (enemy as any).specialdef = spd;
+  (enemy as any).attackStages = 1;
+  (enemy as any).defenseStages = 1;
+  (enemy as any).specialatkStages = 1;
+  (enemy as any).specialdefStages = 1;
   (enemy as any).typeOne = type1;
   (enemy as any).typeTwo = type2;
   (enemy as any).status = "None";
@@ -126,16 +162,17 @@ function spawnEnemy(scene: Phaser.Scene, mon: String, type1: String, type2: Stri
               break;
             case "Freeze":
               enemy.pauseFollow();
-              scene.time.delayedCall(600, () => {
+              scene.time.delayedCall(100, () => {
                 enemy.resumeFollow();
               });
               (enemy as any).status = "None";
               break;
             case "Paralysis":
-              (enemy as any).attack /= 2;
-              (enemy as any).spatk /= 2;
-              (enemy as any).status = "Para Done";
-              label.setColor('#FFFF00');
+              enemy.pauseFollow();
+              scene.time.delayedCall(100, () => {
+                enemy.resumeFollow();
+              });
+              (enemy as any).status = "None";
               break;
             case "Poison":
               const predictedPoisonDmg = (enemy as any).health * 0.04;
@@ -149,7 +186,7 @@ function spawnEnemy(scene: Phaser.Scene, mon: String, type1: String, type2: Stri
               break;
             case "Sleep":
               enemy.pauseFollow();
-              scene.time.delayedCall(600, () => {
+              scene.time.delayedCall(100, () => {
                 enemy.resumeFollow();
               });
               (enemy as any).status = "None";
@@ -198,7 +235,7 @@ export function dealDamage(amount: number, atk: number, spatk: number, cave: boo
 export function takeDamage(enemy: Phaser.GameObjects.PathFollower, scene: Phaser.Scene, type: string, category: string, amount: number, cc: number) {
   const data = enemy as any; const cd = cc > Math.random() ? 1.5 : 1;
   const dmgEFF = effectiveness(type, (enemy as any).typeOne, (enemy as any).typeTwo);
-  const defenseCategory = category == "Physical" ? data.defense : data.specialdef;
+  const defenseCategory = category == "Physical" ? data.defense / data.defenseStages : data.specialdef / data.specialdefStages;
   let dmgTotal = Math.ceil((amount * dmgEFF * cd) / defenseCategory);
   if (data.health < dmgTotal) {
     award(data.health);
@@ -207,7 +244,7 @@ export function takeDamage(enemy: Phaser.GameObjects.PathFollower, scene: Phaser
     award(dmgTotal);
   }
   data.health -= dmgTotal;
-  showDamageText(scene, enemy.x, enemy.y, dmgTotal, dmgEFF, cd > 1);
+  showDamageText(scene, enemy.x, enemy.y, dmgTotal.toString(), dmgEFF, cd > 1);
 
   if (data.health <= 0) {
     enemy.destroy();
@@ -275,7 +312,30 @@ function effectiveness(type: string, typeOne: string, typeTwo: string) {
   let multiplier = typeChart[typeInt][typeIntOne]; multiplier *= typeIntTwo != -1 ? typeChart[typeInt][typeIntTwo] : 1; return multiplier;
 }
 
-function showDamageText(scene: Phaser.Scene, x: number, y: number, damage: number, eff: number, cd: boolean) {
+export function lowerState(scene: Phaser.Scene, en: Phaser.GameObjects.PathFollower, state: string, chance: number) {
+  if (Math.random() < chance) {
+    switch (state) {
+      case "attack":
+        (en as any).attackStages += (en as any).attackStages >= 2 ? 0 : 0.25;
+        showDamageText(scene, en.x, en.y, "🥊", 1, false);
+        break;
+      case "defense":
+        (en as any).defenseStages += (en as any).defenseStages >= 2 ? 0 : 0.25;
+        showDamageText(scene, en.x, en.y, "⛊", 1, false);
+        break;
+      case "specialatk":
+        (en as any).specialatkStages += (en as any).specialatkStages >= 2 ? 0 : 0.25;
+        showDamageText(scene, en.x, en.y, "✨", 1, false);
+        break;
+      case "specialdef":
+        (en as any).specialdefStages += (en as any).specialdefStages >= 2 ? 0 : 0.25;
+        showDamageText(scene, en.x, en.y, "⛉", 1, false);
+        break;
+    }
+  }
+}
+
+function showDamageText(scene: Phaser.Scene, x: number, y: number, damage: string, eff: number, cd: boolean) {
   let color = '#ffffff';
   if (eff < 0.5) {
     color = '#00008B';
@@ -290,7 +350,7 @@ function showDamageText(scene: Phaser.Scene, x: number, y: number, damage: numbe
     color = '#FF0000';
   }
   const showCrit = cd ? "💥" : ""
-  const text = scene.add.text(x - Math.random() * 50 + 25, y - Math.random() * 50 + 25, damage.toString() + showCrit, {
+  const text = scene.add.text(x - Math.random() * 50 + 25, y - Math.random() * 50 + 25, damage + showCrit, {
     fontSize: '14px',
     color: `${color}`,
     stroke: '#000000',
@@ -399,7 +459,10 @@ export async function startRound(scene: Phaser.Scene) {
 }
 
 function changeArea(scene: Phaser.Scene) {
-    if (area.indexOf("Round") != -1 && area.substring(area.indexOf("Round")+6, area.indexOf("/")) != area.substring(area.indexOf("/")+1)) {
+    if (currentHealth < 0) {
+      area = "Failed " + areaList[areaIndex - 1];
+    }
+    else if (area.indexOf("Round") != -1 && area.substring(area.indexOf("Round")+6, area.indexOf("/")) != area.substring(area.indexOf("/")+1)) {
         const slash = area.indexOf("/");
         area = area.substring(0, slash - 1) + (parseInt(area.charAt(slash-1))+1) + area.substring(area.indexOf("/"));
         startRound(scene);
@@ -409,6 +472,35 @@ function changeArea(scene: Phaser.Scene) {
         updateHealth(0, true);
         areaIndex++;
     }
-    Pichu.hatch();
+    Rowlet.updateRounds();
+    Oshawott.updateRounds();
+    Cyndaquil.updateRounds();
+    Oddish.updateRounds();
+    Poliwag.updateRounds();
+    Slowpoke.updateRounds();
+    Scyther.updateRounds();
+    Exeggcute.updateRounds();
+    Cubone.updateRounds();
+    Koffing.updateRounds();
+    Eevee.updateRounds();
+    Pichu.updateRounds();
+    MimeJr.updateRounds();
+    Tyrogue.updateRounds();
+    Wurmple.updateRounds();
+    Ralts.updateRounds();
+    Nincada.updateRounds();
+    Snorunt.updateRounds();
+    Clamperl.updateRounds();
+    Burmy.updateRounds();
+    Petilil.updateRounds();
+    Rufflet.updateRounds();
+    Goomy.updateRounds();
+    Bergmite.updateRounds();
+    Cosmog.updateRounds();
+    Applin.updateRounds();
+    Charcadet.updateRounds();
+    Rockruff.updateRounds();
+    Toxel.updateRounds();
+    Kubfu.updateRounds();
     changeLabel(area);
 }

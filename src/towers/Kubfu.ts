@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
-import { enemies, takeDamage, } from '../round';
+import { enemies, lowerState, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
-export class Rowlet extends Phaser.GameObjects.Image {
-  private range: number = 3000;
+export class Kubfu extends Phaser.GameObjects.Image {
+  private range: number = 400;
   private shootTimer?: Phaser.Time.TimerEvent;
   private static roundsPassed: number = -1;
 
@@ -12,16 +12,16 @@ export class Rowlet extends Phaser.GameObjects.Image {
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon00');
+    super(scene, x, y, 'pokemon29');
     this.setOrigin(0.5);
     scene.add.existing(this);
-    Rowlet.roundsPassed++;
+    Kubfu.roundsPassed++;
     this.startAttacking(scene);
   }
 
   private startAttacking(scene: Phaser.Scene) {
     this.shootTimer = scene.time.addEvent({
-      delay: 2000,
+      delay: 1500,
       loop: true,
       callback: () => {
         const target = this.findNearestEnemy();
@@ -48,14 +48,30 @@ export class Rowlet extends Phaser.GameObjects.Image {
   }
 
   private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
-    const projectile = scene.physics.add.image(this.x, this.y, 'projectile0')
-      .setDisplaySize(16, 16)
+    let damageDealt = false;
+    const projectile = scene.physics.add.image(this.x, this.y, 'projectile11')
+      .setDisplaySize(24, 24)
       .setDepth(1);
-      scene.physics.moveToObject(projectile, target, 800);
+      scene.physics.moveToObject(projectile, target, 450);
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Grass", "Physical", 88, 1/24);
-        projectile.destroy();
-        scene.events.off('update', updateHandler);
+        projectile.setPosition(target.x + 10, target.y);
+        projectile.setVelocity(0, 0);
+        scene.time.delayedCall(150, () => {
+          if (projectile && projectile.active) {
+            this.setAlpha(0);
+            projectile.setTexture('pokemon29');
+            scene.time.delayedCall(300, () => {
+              projectile.destroy();
+              scene.events.off('update', updateHandler);
+              if (!damageDealt) {
+                takeDamage((enemy as any), scene, "Fighting", "Physical", 108, 1/24);
+                lowerState(scene, (enemy as any), "defense", 0.5)
+                damageDealt = true;
+              }
+              this.setAlpha(1);
+            });
+          };
+        });
       });
       const updateHandler = () => {
         if (!projectile.active) {

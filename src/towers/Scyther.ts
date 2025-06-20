@@ -5,6 +5,7 @@ import { enemiesGroup } from '../index';
 export class Scyther extends Phaser.GameObjects.Image {
   private range: number = 700;
   private shootTimer?: Phaser.Time.TimerEvent;
+  private static roundsPassed: number = -1;
 
   constructor(
     scene: Phaser.Scene,
@@ -14,7 +15,7 @@ export class Scyther extends Phaser.GameObjects.Image {
     super(scene, x, y, 'pokemon02');
     this.setOrigin(0.5);
     scene.add.existing(this);
-
+    Scyther.roundsPassed++;
     this.startAttacking(scene);
   }
 
@@ -60,6 +61,7 @@ export class Scyther extends Phaser.GameObjects.Image {
             takeDamage((enemy as any), scene, "Bug", "Physical", 220, 1/24);
             this.setAlpha(1);
             projectile.destroy();
+            scene.events.off('update', updateHandler);
           }
         });
       });
@@ -79,7 +81,9 @@ export class Scyther extends Phaser.GameObjects.Image {
     scene.events.on('update', updateHandler);
   }
 
-  public static rowletUpgrade() {
-    
+  public static updateRounds() {
+    if (this.roundsPassed != -1) {
+      this.roundsPassed++;
+    }
   }
 }

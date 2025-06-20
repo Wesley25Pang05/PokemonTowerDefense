@@ -1,32 +1,36 @@
 import Phaser from 'phaser';
-import { enemies, takeDamage, } from '../round';
+import { enemies, statusPossibility, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
-export class Slowpoke extends Phaser.GameObjects.Image {
-  private range: number = 200;
+export class MimeJr extends Phaser.GameObjects.Image {
+  private range: number = 900;
   private shootTimer?: Phaser.Time.TimerEvent;
-  private static roundsPassed: number = -1;
+  private static roundsPassed: number = -26;
+  private static confusion: boolean = false;
 
   constructor(
     scene: Phaser.Scene,
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon21');
+    super(scene, x, y, 'Egg');
     this.setOrigin(0.5);
     scene.add.existing(this);
-    Slowpoke.roundsPassed++;
+    MimeJr.roundsPassed++;
     this.startAttacking(scene);
   }
 
   private startAttacking(scene: Phaser.Scene) {
     this.shootTimer = scene.time.addEvent({
-      delay: 300,
+      delay: 900,
       loop: true,
       callback: () => {
         const target = this.findNearestEnemy();
-        if (target) {
-          this.shoot(scene, target);
+        if (MimeJr.roundsPassed >= 0) {
+          this.setTexture("pokemon04");
+        }
+        if (target && MimeJr.confusion) {
+          this.shoot(scene, target, -20);
         }
       }
     });
@@ -47,19 +51,24 @@ export class Slowpoke extends Phaser.GameObjects.Image {
     return closestEnemy;
   }
 
-  private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
-    const projectile = scene.physics.add.image(this.x, this.y, 'projectile1')
+  private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower, dy: number) {
+    const projectile = scene.physics.add.image(this.x, this.y, 'projectile7')
       .setDisplaySize(16, 16)
       .setDepth(1);
       scene.physics.moveToObject(projectile, target, 300);
-      scene.time.delayedCall(600, () => {
+      scene.time.delayedCall(900, () => {
         if (projectile && projectile.active) {
-          projectile.destroy();
-          scene.events.off('update', updateHandler);
+          scene.physics.moveToObject(projectile, target, 900);
+          scene.time.delayedCall(1800, () => {
+            if (projectile && projectile.active) {
+              projectile.destroy();
+              scene.events.off('update', updateHandler);
+            }
+          });
         }
       });
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Water", "Special", 9.6, 1/24);
+        takeDamage((enemy as any), scene, "Psychic", "Special", 63, 1/24);
         projectile.destroy();
         scene.events.off('update', updateHandler);
     });
@@ -79,7 +88,10 @@ export class Slowpoke extends Phaser.GameObjects.Image {
   }
 
   public static updateRounds() {
-    if (this.roundsPassed != -1) {
+    if (this.roundsPassed >= 0) {
+      this.confusion = true;
+    }
+    else if (this.roundsPassed > -26) {
       this.roundsPassed++;
     }
   }

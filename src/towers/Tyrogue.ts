@@ -1,32 +1,36 @@
 import Phaser from 'phaser';
-import { enemies, takeDamage, } from '../round';
+import { enemies, statusPossibility, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
-export class Rowlet extends Phaser.GameObjects.Image {
-  private range: number = 3000;
+export class Tyrogue extends Phaser.GameObjects.Image {
+  private range: number = 200;
   private shootTimer?: Phaser.Time.TimerEvent;
-  private static roundsPassed: number = -1;
+  private static roundsPassed: number = -26;
+  private static machpunch: boolean = false;
 
   constructor(
     scene: Phaser.Scene,
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon00');
+    super(scene, x, y, 'Egg');
     this.setOrigin(0.5);
     scene.add.existing(this);
-    Rowlet.roundsPassed++;
+    Tyrogue.roundsPassed++;
     this.startAttacking(scene);
   }
 
   private startAttacking(scene: Phaser.Scene) {
     this.shootTimer = scene.time.addEvent({
-      delay: 2000,
+      delay: 800,
       loop: true,
       callback: () => {
         const target = this.findNearestEnemy();
-        if (target) {
-          this.shoot(scene, target);
+        if (Tyrogue.roundsPassed >= 0) {
+          this.setTexture("pokemon14");
+        }
+        if (target && Tyrogue.machpunch) {
+          this.shoot(scene, target, -20);
         }
       }
     });
@@ -47,33 +51,39 @@ export class Rowlet extends Phaser.GameObjects.Image {
     return closestEnemy;
   }
 
-  private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
-    const projectile = scene.physics.add.image(this.x, this.y, 'projectile0')
-      .setDisplaySize(16, 16)
+  private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower, dy: number) {
+    this.setAlpha(0);
+    const projectile = scene.physics.add.image(this.x, this.y, 'pokemon14')
+      .setDisplaySize(this.displayWidth, this.displayHeight)
       .setDepth(1);
       scene.physics.moveToObject(projectile, target, 800);
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Grass", "Physical", 88, 1/24);
+        takeDamage((enemy as any), scene, "Fighting", "Physical", 22.5, 1/24);
+        this.setAlpha(1);
         projectile.destroy();
         scene.events.off('update', updateHandler);
-      });
-      const updateHandler = () => {
-        if (!projectile.active) {
-          scene.events.off('update', updateHandler);
-          return;
-        }
+    });
+    const updateHandler = () => {
+      if (!projectile.active) {
+        scene.events.off('update', updateHandler);
+        return;
+      }
 
-        if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
-          projectile.destroy();
-          scene.events.off('update', updateHandler);
-        }
-      };
+      if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
+        projectile.destroy();
+        this.setAlpha(1);
+        scene.events.off('update', updateHandler);
+      }
+    };
 
     scene.events.on('update', updateHandler);
   }
 
   public static updateRounds() {
-    if (this.roundsPassed != -1) {
+    if (this.roundsPassed >= 0) {
+      this.machpunch = true;
+    }
+    else if (this.roundsPassed > -26) {
       this.roundsPassed++;
     }
   }

@@ -2,8 +2,8 @@ import Phaser from 'phaser';
 import { enemies, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
-export class Rowlet extends Phaser.GameObjects.Image {
-  private range: number = 3000;
+export class Applin extends Phaser.GameObjects.Image {
+  private range: number = 2000;
   private shootTimer?: Phaser.Time.TimerEvent;
   private static roundsPassed: number = -1;
 
@@ -12,16 +12,16 @@ export class Rowlet extends Phaser.GameObjects.Image {
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon00');
+    super(scene, x, y, 'pokemon18');
     this.setOrigin(0.5);
     scene.add.existing(this);
-    Rowlet.roundsPassed++;
+    Applin.roundsPassed++;
     this.startAttacking(scene);
   }
 
   private startAttacking(scene: Phaser.Scene) {
     this.shootTimer = scene.time.addEvent({
-      delay: 2000,
+      delay: 3000,
       loop: true,
       callback: () => {
         const target = this.findNearestEnemy();
@@ -48,22 +48,37 @@ export class Rowlet extends Phaser.GameObjects.Image {
   }
 
   private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
-    const projectile = scene.physics.add.image(this.x, this.y, 'projectile0')
-      .setDisplaySize(16, 16)
+    this.setAlpha(0); let speed = 230;
+    const projectile = scene.physics.add.image(this.x, this.y, 'pokemon18')
+      .setDisplaySize(this.displayWidth, this.displayHeight)
       .setDepth(1);
-      scene.physics.moveToObject(projectile, target, 800);
-      scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Grass", "Physical", 88, 1/24);
+      scene.time.delayedCall(2300, () => {
+        this.setAlpha(1);
         projectile.destroy();
-        scene.events.off('update', updateHandler);
+      })
+      scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
+        if (projectile && projectile.active) {
+          takeDamage((enemy as any), scene, "Grass", "Physical", 132, 1/24);
+          this.setAlpha(1);
+          projectile.destroy();
+          scene.events.off('update', updateHandler);
+        }
       });
       const updateHandler = () => {
         if (!projectile.active) {
           scene.events.off('update', updateHandler);
           return;
         }
-
+        speed--;
+        if (speed < 0) {
+          scene.physics.moveToObject(projectile, target, 0);
+          projectile.setDisplaySize(-1 * speed + this.displayWidth, -1 * speed + this.displayHeight)
+        }
+        else {
+          scene.physics.moveToObject(projectile, target, speed);
+        }
         if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
+          this.setAlpha(1);
           projectile.destroy();
           scene.events.off('update', updateHandler);
         }

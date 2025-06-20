@@ -5,6 +5,7 @@ import { enemiesGroup, updateHealth } from '../index';
 export class Exeggcute extends Phaser.GameObjects.Image {
   private range: number = 250;
   private shootTimer?: Phaser.Time.TimerEvent;
+  private static roundsPassed: number = -1;
 
   constructor(
     scene: Phaser.Scene,
@@ -14,7 +15,7 @@ export class Exeggcute extends Phaser.GameObjects.Image {
     super(scene, x, y, 'pokemon12');
     this.setOrigin(0.5);
     scene.add.existing(this);
-
+    Exeggcute.roundsPassed++;
     this.startAttacking(scene);
   }
 
@@ -54,12 +55,14 @@ export class Exeggcute extends Phaser.GameObjects.Image {
       scene.time.delayedCall(3000, () => {
         if (projectile && projectile.active) {
           projectile.destroy();
+          scene.events.off('update', updateHandler);
         }
       });
       const healing = Math.round(takeDamage(target, scene, "Grass", "Special", 24, 1/24) / 2);
       scene.physics.add.overlap(projectile, this, (proj) => {
         updateHealth(healing, true);
         projectile.destroy();
+        scene.events.off('update', updateHandler);
     });
     const updateHandler = () => {
       if (!projectile.active) {
@@ -74,5 +77,11 @@ export class Exeggcute extends Phaser.GameObjects.Image {
     };
 
     scene.events.on('update', updateHandler);
+  }
+
+  public static updateRounds() {
+    if (this.roundsPassed != -1) {
+      this.roundsPassed++;
+    }
   }
 }

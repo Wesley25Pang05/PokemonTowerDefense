@@ -5,6 +5,7 @@ import { enemiesGroup } from '../index';
 export class Cyndaquil extends Phaser.GameObjects.Image {
   private range: number = 400;
   private shootTimer?: Phaser.Time.TimerEvent;
+  private static roundsPassed: number = -1;
 
   constructor(
     scene: Phaser.Scene,
@@ -14,7 +15,7 @@ export class Cyndaquil extends Phaser.GameObjects.Image {
     super(scene, x, y, 'pokemon20');
     this.setOrigin(0.5);
     scene.add.existing(this);
-
+    Cyndaquil.roundsPassed++;
     this.startAttacking(scene);
   }
 
@@ -54,12 +55,14 @@ export class Cyndaquil extends Phaser.GameObjects.Image {
       scene.time.delayedCall(800, () => {
         if (projectile && projectile.active) {
           projectile.destroy();
+          scene.events.off('update', updateHandler);
         }
       });
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
         takeDamage((enemy as any), scene, "Fire", "Special", 28.8, 1/24);
         statusPossibility((enemy as any), "Burn", 0.1);
         projectile.destroy();
+        scene.events.off('update', updateHandler);
     });
     const updateHandler = () => {
       if (!projectile.active) {
@@ -74,5 +77,11 @@ export class Cyndaquil extends Phaser.GameObjects.Image {
     };
 
     scene.events.on('update', updateHandler);
+  }
+
+  public static updateRounds() {
+    if (this.roundsPassed != -1) {
+      this.roundsPassed++;
+    }
   }
 }
