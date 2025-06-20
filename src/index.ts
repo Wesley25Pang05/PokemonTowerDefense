@@ -111,7 +111,7 @@ const descriptionMap: Record<string, string> = {};
 const statsMap: Record<string, string> = {};
 let playerHealth = 0; export let currentHealth = 0;
 let playerDef = 0; let playerSpDef = 0;
-let playerEXP = 25000;
+let playerEXP = 2500;
 
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
