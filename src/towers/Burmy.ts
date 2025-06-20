@@ -58,7 +58,7 @@ export class Burmy extends Phaser.GameObjects.Image {
         }
       });
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Bug", "Special", (enemy as any).health / 8, 1/24);
+        takeDamage((enemy as any), scene, "Bug", "Special", (enemy as any).health, 1/24);
         projectile.destroy();
         scene.events.off('update', updateHandler);
     });

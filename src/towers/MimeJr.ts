@@ -55,11 +55,11 @@ export class MimeJr extends Phaser.GameObjects.Image {
     const projectile = scene.physics.add.image(this.x, this.y, 'projectile7')
       .setDisplaySize(16, 16)
       .setDepth(1);
-      scene.physics.moveToObject(projectile, target, 300);
+      scene.physics.moveToObject(projectile, target, 600);
       scene.time.delayedCall(900, () => {
         if (projectile && projectile.active) {
-          scene.physics.moveToObject(projectile, target, 900);
-          scene.time.delayedCall(1800, () => {
+          scene.physics.moveToObject(projectile, target, 1200);
+          scene.time.delayedCall(1500, () => {
             if (projectile && projectile.active) {
               projectile.destroy();
               scene.events.off('update', updateHandler);

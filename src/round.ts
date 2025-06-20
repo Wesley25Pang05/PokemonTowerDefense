@@ -30,12 +30,13 @@ import { Charcadet } from './towers/Charcadet';
 import { Rockruff } from './towers/Rockruff';
 import { Toxel } from './towers/Toxel';
 import { Kubfu } from './towers/Kubfu';
+import { Stats } from './Stats';
 
 export let area = "Pallet Town";
 export let enemies: Phaser.GameObjects.PathFollower[] = [];
 let areaIndex = 0;
 let areaList = ["Route 1: Round 1/5", "Viridian City", "Route 2: Round 1/6", "Back to Viridian City for a break.",
-    "Viridian Forest: Round 1/11", "Pewter City: Gym Incoming", "Gym 1: Brock | Round 1/3", "Pewter City: Boulder Badge Acquired",
+    "Viridian Forest: Round 1/18", "Pewter City: Gym Incoming", "Gym 1: Brock | Round 1/3", "Pewter City: Boulder Badge Acquired",
     "Route 3: Round 1/13", "Back to Pewter City for a break.", "Mount Moon: Round 1/14", "Outside Mount Moon", "Route 4: Round 1/11",
     "Cerulean City", "Route 24: Round 1/18", "Back to Cerulean City for a break", "Route 25: Round 1/20", "Cerulean City: Gym Incoming",
     "Gym 1: Misty | Round 1/4"];
@@ -79,11 +80,11 @@ export function paths(scene: Phaser.Scene) {
   path2.draw(graphics);
 }
 
-function spawnEnemy(scene: Phaser.Scene, mon: String, type1: String, type2: String, trainer: String,
-    hp: integer, atk: integer, def: integer, spa: integer, spd: integer, spe: integer, experience: integer) {
-  const enemy = scene.add.follower(path1, 240, 480, `${mon}`);
+async function spawnEnemy(scene: Phaser.Scene, mon: string, trainer: string,
+    lvl: number) {
+  const enemy = scene.add.follower(path1, 240, 480, `${mon}`).setScale(0.2 + lvl * 0.0005);
   scene.physics.add.existing(enemy);
-  const label = scene.add.text(enemy.x, enemy.y - 40, `${trainer} ${mon}`, {
+  const label = scene.add.text(enemy.x, enemy.y - 40, `${trainer} LvL${lvl} ${mon}`, {
     fontSize: '14px',
     color: '#ffffff',
     stroke: '#000000',
@@ -100,32 +101,38 @@ function spawnEnemy(scene: Phaser.Scene, mon: String, type1: String, type2: Stri
   enemy.setData('healthLabel', healthLabel);
   enemies.push(enemy);
   enemiesGroup.add(enemy);
-  (enemy as any).health = hp;
-  (enemy as any).attack = atk;
-  (enemy as any).defense = def;
-  (enemy as any).specialatk = spa;
-  (enemy as any).specialdef = spd;
+  const allStats = Stats.getPokemon(mon, lvl, trainer);
+  (enemy as any).health = (await allStats).stats.HP;
+  (enemy as any).attack = (await allStats).stats.Attack;
+  (enemy as any).defense = (await allStats).stats.Defense;
+  (enemy as any).specialatk = (await allStats).stats['Sp. Atk'];
+  (enemy as any).specialdef = (await allStats).stats['Sp. Def'];
   (enemy as any).attackStages = 1;
   (enemy as any).defenseStages = 1;
   (enemy as any).specialatkStages = 1;
   (enemy as any).specialdefStages = 1;
-  (enemy as any).typeOne = type1;
-  (enemy as any).typeTwo = type2;
+  (enemy as any).typeOne = (await allStats).types[0];
+  (enemy as any).typeTwo = (await allStats).types[1];
   (enemy as any).status = "None";
   (enemy as any).statusDelay = 0;
-  (enemy as any).xp = experience;
-  enemy.setScale(0.2);
+  (enemy as any).xp = (await allStats).stats.EXP * lvl / 5;
+  if (trainer.indexOf("Wild") == -1) {
+    (enemy as any).xp *= 1.5;
+  }
+  if (trainer.indexOf("Gym Leader") > -1) {
+    (enemy as any).xp *= 5;
+  }
 
   enemy.startFollow({
-    duration: 296000 / spe,
-    onComplete: () => {
+    duration: 148000 / Math.pow((await allStats).stats.Speed, 0.65),
+    onComplete: async () => {
       if (enemy.active) {
         dealDamage(Math.min((enemy as any).attack, (enemy as any).specialatk),
         (enemy as any).attack, (enemy as any).specialatk, true);
         enemy.setPosition(168, 40);
         enemy.path = path2;
         enemy.startFollow({
-          duration: 404600 / spe,
+          duration: 202300 / Math.pow((await allStats).stats.Speed, 0.65),
           onComplete: () => {
             dealDamage(Math.max((enemy as any).attack, (enemy as any).specialatk),
             (enemy as any).attack, (enemy as any).specialatk, false);
@@ -144,7 +151,7 @@ function spawnEnemy(scene: Phaser.Scene, mon: String, type1: String, type2: Stri
   scene.time.addEvent({
     loop: true,
     delay: 1,
-    callback: () => {
+    callback: async () => {
       if (!enemy.active) {
         label.destroy();
         healthLabel.destroy();
@@ -203,14 +210,14 @@ function spawnEnemy(scene: Phaser.Scene, mon: String, type1: String, type2: Stri
       label.setPosition(enemy.x, enemy.y - 40);
       healthLabel.setPosition(enemy.x, enemy.y - 25);
       let tempLabel = "";
-      for (let h = 0; h < 20 * (enemy as any).health / hp; h++) {
+      for (let h = 0; h < 20 * (enemy as any).health / (await allStats).stats.HP; h++) {
         tempLabel += "█";
       }
       healthLabel.setText(tempLabel);
-      if ((enemy as any).health > hp / 2) {
+      if ((enemy as any).health > (await allStats).stats.HP / 2) {
         healthLabel.setColor('#90EE90');
       }
-      else if ((enemy as any).health > hp / 5) {
+      else if ((enemy as any).health > (await allStats).stats.HP / 5) {
         healthLabel.setColor('#FFFF00');
       }
       else {
@@ -372,82 +379,103 @@ export async function startRound(scene: Phaser.Scene) {
   if (enemies.length == 0) {
     switch (area) {
         case "Route 1: Round 1/5":
-            spawnEnemy(scene, "Pidgey", "Normal", "Flying", "Wild", 16, 8, 8, 8, 8, 9, 50);
+            spawnEnemy(scene, "Pidgey", "Wild", 3);
             break;
         case "Route 1: Round 2/5":
-            spawnEnemy(scene, "Rattata", "Normal", "None", "Wild", 15, 9, 8, 7, 8, 10, 51);
+            spawnEnemy(scene, "Rattata", "Wild", 3);
             break;
         case "Route 1: Round 3/5":
-            spawnEnemy(scene, "Oddish", "Grass", "Poison", "Wild", 16, 8, 9, 10, 9, 7, 64);
+            spawnEnemy(scene, "Oddish", "Wild", 3);
             break;
         case "Route 1: Round 4/5":
-            spawnEnemy(scene, "Bellsprout", "Grass", "Poison", "Wild", 16, 10, 8, 10, 7, 8, 60);
+            spawnEnemy(scene, "Bellsprout", "Wild", 3);
             break;
         case "Route 1: Round 5/5":
-            spawnEnemy(scene, "Rattata", "Normal", "None", "Youngster Ronny's", 17, 11, 9, 9, 9, 12, 51*2);
+            spawnEnemy(scene, "Rattata", "Youngster Ronny's", 3);
             break;
         case "Route 2: Round 1/6":
-            spawnEnemy(scene, "Pidgey", "Normal", "Flying", "Wild", 16, 8, 8, 8, 8, 9, 50);
+            spawnEnemy(scene, "Pidgey", "Wild", 3);
             break;
         case "Route 2: Round 2/6":
-            spawnEnemy(scene, "Rattata", "Normal", "None", "Wild", 15, 9, 8, 7, 8, 10, 51);
+            spawnEnemy(scene, "Rattata", "Wild", 3);
             break;
         case "Route 2: Round 3/6":
-            spawnEnemy(scene, "Oddish", "Grass", "Poison", "Wild", 16, 8, 9, 10, 9, 7, 64);
+            spawnEnemy(scene, "Oddish", "Wild", 3);
             break;
         case "Route 2: Round 4/6":
-            spawnEnemy(scene, "Bellsprout", "Grass", "Poison", "Wild", 16, 10, 8, 10, 7, 8, 60);
+            spawnEnemy(scene, "Bellsprout", "Wild", 3);
             break;
         case "Route 2: Round 5/6":
-            spawnEnemy(scene, "Caterpie", "Bug", "None", "Wild", 16, 7, 8, 7, 7, 8, 39);
+            spawnEnemy(scene, "Caterpie", "Wild", 3);
             break;
         case "Route 2: Round 6/6":
-            spawnEnemy(scene, "Weedle", "Bug", "Poison", "Wild", 16, 8, 7, 7, 7, 8, 39);
+            spawnEnemy(scene, "Weedle", "Wild", 3);
             break;
-        case "Viridian Forest: Round 1/11":
-            spawnEnemy(scene, "Pikachu", "Electric", "None", "Wild", 16, 9, 8, 8, 8, 11, 112);
+        case "Viridian Forest: Round 1/18":
+            spawnEnemy(scene, "Caterpie", "Wild", 3);
             break;
-        case "Viridian Forest: Round 2/11":
-            spawnEnemy(scene, "Butterfree", "Bug", "Flying", "Wild", 17, 8, 8, 11, 10, 10, 178);
+        case "Viridian Forest: Round 2/18":
+            spawnEnemy(scene, "Weedle", "Wild", 3);
             break;
-        case "Viridian Forest: Round 3/11":
-            spawnEnemy(scene, "Beedrill", "Bug", "Poison", "Wild", 17, 11, 8, 8, 10, 10, 178);
+        case "Viridian Forest: Round 3/18":
+            spawnEnemy(scene, "Pidgey", "Wild", 3);
             break;
-        case "Viridian Forest: Round 4/11":
-            spawnEnemy(scene, "Bulbasaur", "Grass", "Poison", "Wild", 16, 8, 8, 9, 9, 8, 64);
+        case "Viridian Forest: Round 4/18":
+            spawnEnemy(scene, "Metapod", "Wild", 3);
             break;
-        case "Viridian Forest: Round 5/11":
-            spawnEnemy(scene, "Weedle", "Bug", "Poison", "Bug Catcher Brian's", 18, 9, 9, 9, 9, 10, 39*2);
+        case "Viridian Forest: Round 5/18":
+            spawnEnemy(scene, "Kakuna", "Wild", 3);
             break;
-        case "Viridian Forest: Round 6/11":
-            spawnEnemy(scene, "Rattata", "Normal", "None", "Lass Joana's", 20, 13, 11, 10, 11, 14, 51*2);
+        case "Viridian Forest: Round 6/18":
+            spawnEnemy(scene, "Oddish", "Wild", 3);
             break;
-        case "Viridian Forest: Round 7/11":
-            spawnEnemy(scene, "Caterpie", "Bug", "None", "Bug Catcher Rick's", 18, 9, 9, 9, 9, 10, 39*2);
+        case "Viridian Forest: Round 7/18":
+            spawnEnemy(scene, "Bellsprout", "Wild", 3);
             break;
-        case "Viridian Forest: Round 8/11":
-            spawnEnemy(scene, "NidoranF", "Poison", "None", "Lass Brittany's", 22, 12, 12, 11, 11, 12, 55*2);
+        case "Viridian Forest: Round 8/18":
+            spawnEnemy(scene, "Pikachu", "Wild", 3);
             break;
-        case "Viridian Forest: Round 9/11":
-            spawnEnemy(scene, "Kakuna", "Bug", "Poison", "Bug Catcher Doug's", 18, 9, 10, 9, 9, 9, 72*2);
+        case "Viridian Forest: Round 9/18":
+            spawnEnemy(scene, "Butterfree", "Wild", 3);
             break;
-        case "Viridian Forest: Round 10/11":
-            spawnEnemy(scene, "Pidgey", "Normal", "Flying", "Lass Jocelyn's", 20, 12, 11, 11, 11, 13, 50*2);
+        case "Viridian Forest: Round 10/18":
+            spawnEnemy(scene, "Beedrill", "Wild", 3);
             break;
-        case "Viridian Forest: Round 11/11":
-            spawnEnemy(scene, "Metapod", "Bug", "None", "Bug Catcher Sammy's", 18, 9, 11, 9, 9, 9, 72*2);
+        case "Viridian Forest: Round 11/18":
+            spawnEnemy(scene, "Bulbasaur", "Wild", 3);
+            break;
+        case "Viridian Forest: Round 12/18":
+            spawnEnemy(scene, "Weedle", "Bug Catcher Brian's", 3);
+            break;
+        case "Viridian Forest: Round 13/18":
+            spawnEnemy(scene, "Rattata", "Lass Joana's", 4);
+            break;
+        case "Viridian Forest: Round 14/18":
+            spawnEnemy(scene, "Caterpie", "Bug Catcher Rick's", 3);
+            break;
+        case "Viridian Forest: Round 15/18":
+            spawnEnemy(scene, "NidoranF", "Lass Brittany's", 4);
+            break;
+        case "Viridian Forest: Round 16/18":
+            spawnEnemy(scene, "Kakuna", "Bug Catcher Doug's", 3);
+            break;
+        case "Viridian Forest: Round 17/18":
+            spawnEnemy(scene, "Pidgey", "Lass Jocelyn's", 4);
+            break;
+        case "Viridian Forest: Round 18/18":
+            spawnEnemy(scene, "Metapod", "Bug Catcher Sammy's", 3);
             break;
         case "Gym 1: Brock | Round 1/3":
-            spawnEnemy(scene, "Geodude", "Rock", "Ground", "Picnicker Amara's", 29, 22, 25, 15, 15, 14, 60*2);
+            spawnEnemy(scene, "Geodude", "Picnicker Amara's", 7);
             break;
         case "Gym 1: Brock | Round 2/3":
-            spawnEnemy(scene, "Geodude", "Rock", "Ground", "Camper Liam's", 29, 22, 25, 15, 15, 14, 60*2);
+            spawnEnemy(scene, "Geodude", "Camper Liam's", 7);
             break;
         case "Gym 1: Brock | Round 3/3":
             spawning = true;
-            spawnEnemy(scene, "Geodude", "Rock", "Ground", "Brock's", 40, 32, 37, 21, 21, 19, 60*5);
+            spawnEnemy(scene, "Geodude", "Gym Leader Brock's", 11);
             await new Promise(resolve => setTimeout(resolve, 1000));
-            spawnEnemy(scene, "Onix", "Rock", "Ground", "Brock's", 41, 27, 54, 23, 27, 33, 77*5);
+            spawnEnemy(scene, "Onix", "Gym Leader Brock's", 11);
             spawning = false;
             break;
         default:

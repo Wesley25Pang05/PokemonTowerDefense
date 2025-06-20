@@ -3,7 +3,7 @@ import { enemies, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
 export class Bergmite extends Phaser.GameObjects.Image {
-  private range: number = 200;
+  private range: number = 400;
   private shootTimer?: Phaser.Time.TimerEvent;
   private static roundsPassed: number = -1;
 
@@ -61,7 +61,7 @@ export class Bergmite extends Phaser.GameObjects.Image {
   }
 
   private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
-    const size = this.displayWidth + this.displayHeight; let time = 0;
+    const size = this.displayWidth + this.displayHeight; let time = 0; const direction = Math.random() > 0.5 ? -0.1 : 0.1;
     const projectile = scene.physics.add.image(this.x + Math.random() * size - size / 2, this.y  + Math.random() * size - size / 2, 'projectile10')
       .setDisplaySize(16, 16)
       .setDepth(1);
@@ -84,11 +84,10 @@ export class Bergmite extends Phaser.GameObjects.Image {
           return;
         }
         if (time > 100) {
-          scene.physics.moveToObject(projectile, target, 400);
+          scene.physics.moveToObject(projectile, target, 800);
         }
-        else {
-          time++;
-        }
+        projectile.setRotation(Math.pow(time, 1.2) * direction);
+        time++;
         if (projectile.y > 480 || projectile.y < 0 || projectile.x < 0 || projectile.x > 1920) {
           projectile.destroy();
           scene.events.off('update', updateHandler);

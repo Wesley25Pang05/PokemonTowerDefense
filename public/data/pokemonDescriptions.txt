@@ -1,0 +1,119 @@
+pokemon00
+Rowlet is a Grass/Flying Pokémon that costs $2,280. It starts with its ability, Long Reach, and the move, Leafage, for far ranged grass damage.
+❤️68 ⛊11 ⛉10 🏹1000 ⚔️2.000s 🥊88
+
+pokemon10
+Oshawott is a Water Pokémon that costs $2,080. It starts with its move, Water Gun, to deal fast water damage.
+❤️55 ⛊9 ⛉9 🏹150 ⚔️0.300s ✨15.12
+
+pokemon20
+Cyndaquil is a Fire Pokémon that costs $1,920. It starts with its move, Ember, to deal fire damage with a chance at burning.
+❤️39 ⛊8.6 ⛉10 🏹400 ⚔️0.600s ✨28.8 🔥10%
+
+pokemon01
+Oddish is a Grass/Poison Pokémon that costs $2,400. It starts with its move, Absorb, to deal low grass damage, but over heals you.
+❤️45 ⛊11 ⛉13 🏹200 ⚔️1.000s ✨30
+
+pokemon11
+Poliwag is a Water Pokémon that costs $1,600. It starts with its move, Water Gun, to deal fast water damage.
+❤️40 ⛊8 ⛉8 🏹250 ⚔️0.300s ✨9.6
+
+pokemon21
+Slowpoke is a Water/Psychic Pokémon that costs $2,350. It starts with its move, Water Gun, to deal fast water damage.
+❤️90 ⛊13 ⛉8 🏹200 ⚔️0.300s ✨9.6
+
+pokemon02
+Scyther is a Bug/Flying Pokémon that costs $3,400. It starts with its move, Fury Cutter, to deal slow, but high bug damage.
+❤️70 ⛊16 ⛉16 🏹700 ⚔️5.000s 🥊220x2
+
+pokemon12
+Exeggcute is a Grass/Psychic Pokémon that costs $2,450. It starts with its move, Absorb, to deal low grass damage, but over heals you.
+❤️60 ⛊16 ⛉9 🏹250 ⚔️1.000s ✨24
+
+pokemon22
+Cubone is a Ground Pokémon that costs $2,450. It starts with its move, Bone Rush, to deal multiple ground attacks.
+❤️50 ⛊19 ⛉10 🏹400 ⚔️2.000s 🥊50x2 to 50x5
+
+pokemon03
+Koffing is a Poison Pokémon that costs $2,400. It starts with its move, Smog, to deal very weak poison damage, but with a high poison rate.
+❤️40 ⛊19 ⛉9 🏹200 ⚔️1.600s ✨14.4 ☠️40%
+
+pokemon13
+Eevee is a Normal Pokémon that costs $2,250. It starts with its move, Tackle, to deal instant normal damage.
+❤️55 ⛊10 ⛉13 🏹150 ⚔️1.000s 🥊44
+
+pokemon23
+Pichu is an Electric Egg Pokémon that costs $1,050. It starts using, Thunder Shock, at its enemies for slow electric damage that can paralyze.
+❤️20 ⛊3 ⛉7 🏹600 ⚔️1.600s ✨33.6 ⚡10%
+
+pokemon04
+Mime Jr. is a Psychic/Fairy Egg Pokémon that costs $2,250. It starts with its move, Confusion, to lock on to it's enemies with psychic damage.
+❤️20 ⛊9 ⛉18 🏹900 ⚔️0.900s ✨63
+
+pokemon14
+Tyrogue is a Fighting Egg Pokémon that costs $1,400. It starts with its move, Mach Punch, to quickly take down it's opponents with fighting damage.
+❤️35 ⛊7 ⛉7 🏹200 ⚔️0.800s 🥊22.5
+
+pokemon24
+Wurmple is a Bug Pokémon that costs $1,550. It starts with its move, Poison Sting, to deal instant low poison damage, but a high chance to inflict poison.
+❤️45 ⛊7 ⛉6 🏹200 ⚔️0.500s 🥊6.75 ☠️30%
+
+pokemon05
+Ralts is a Psychic/Fairy Pokémon that costs $1,330. It starts with its move, Confusion, to lock on to it's enemies with psychic damage.
+❤️28 ⛊5 ⛉7 🏹800 ⚔️0.900s ✨40.5
+
+pokemon15
+Nincada is a Bug/Ground Pokémon that costs $1,960. It starts with its move, Fury Swipes, to deal multiple normal attacks.
+❤️31 ⛊18 ⛉6 🏹300 ⚔️1.000s 🥊16.2x2 to 16.2x5
+
+pokemon25
+Snorunt is an Ice Pokémon that costs $2,000. It starts with its move, Powder Snow, to deal multiple ice attacks that can inflict Freeze.
+❤️50 ⛊10 ⛉10 🏹400 ⚔️0.800s ✨8x4 🧊10%
+
+pokemon06
+Clamperl is a Water Pokémon that costs $2,490. It starts with its move, Water Gun, to deal fast water damage.
+❤️35 ⛊17 ⛉11 🏹150 ⚔️0.300s ✨17.76
+
+pokemon16
+Burmy is a Bug Pokémon that costs $1,590. It starts with its move, Infestation, to deal bug damage based on the opponents health.
+❤️40 ⛊9 ⛉9 🏹800 ⚔️8.000s ✨HPx8
+
+pokemon26
+Petilil is a Grass Pokémon that costs $2,150. It starts with its move, Magical Leaf, to home towards it's enemies with high grass damage.
+❤️45 ⛊10 ⛉10 🏹600 ⚔️1.600s ✨84
+
+pokemon07
+Rufflet is a Normal/Flying Pokémon that costs $2,530. It starts with its move, Peck, to deal up close flying damage.
+❤️70 ⛊10 ⛉10 🏹700 ⚔️3.500s 🥊203.35
+
+pokemon17
+Goomy is a Dragon Pokémon that costs $4,200. It starts with its move, Dragon Breath, to deal multiple paralyzing dragon damage.
+❤️45 ⛊7 ⛉15 🏹600 ⚔️0.600s ✨39.6 ⚡30%
+
+pokemon27
+Bergmite is an Ice Pokémon that costs $2,440. It starts with its move, Icicle Spear, to deal multiple normal attacks.
+❤️55 ⛊17 ⛉7 🏹400 ⚔️2.000s 🥊69x2 to 69x5
+
+pokemon08
+Cosmog is a Psychic Pokémon that costs $10,000. It starts useless, but it needs levels to evolve.
+❤️43 ⛊6.2 ⛉6.2 🏹0 ⚔️0.000s 🥊? ✨?
+
+pokemon18
+Applin is a Grass/Dragon Pokémon that costs $2,000. It starts with its move, Grassy Glide, to glide towards it's enemies to deal grass damage.
+❤️40 ⛊16 ⛉8 🏹2000 ⚔️3.000s 🥊132
+
+pokemon28
+Charcadet is a Fire Pokémon that costs $1,700. It starts with its move, Ember, to deal fire damage with a chance at burning.
+❤️40 ⛊8 ⛉8 🏹480 ⚔️0.600s ✨24 🔥10%
+
+pokemon09
+Rockruff is a Rock Pokémon that costs $1,900. It starts with its move, Rock Throw, to deal rock damage from far away.
+❤️45 ⛊8 ⛉8 🏹700 ⚔️1.500s 🥊97.5
+
+pokemon19
+Toxel is an Electric/Poison Pokémon that costs $1,640. It starts with its move, Acid, to deal poison damage that can lower enemy's special defense.
+❤️40 ⛊7 ⛉7 🏹300 ⚔️0.500s ✨21.6 -⛉10%
+
+pokemon29
+Kubfu is a Fighting Pokémon that costs $13,000. It starts with its move, Rock Smash, to deal fighting damage that can reduce the enemies defense.
+❤️60 ⛊12 ⛉10 🏹400 ⚔️1.500s 🥊108 -⛊50%

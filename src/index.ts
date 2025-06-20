@@ -88,7 +88,7 @@ function preload(this: Phaser.Scene) {
     this.load.image("projectile" + p, `assets/projectiles/projectile${p}.png`);
   }
   this.load.image('bg', 'hoenn3.png');
-  this.load.text('pokemonDescriptions', 'pokemonDescriptions.txt');
+  this.load.text('pokemonDescriptions', 'data/pokemonDescriptions.txt');
   this.load.image('Nor', `assets/habitats/Nor.png`);
   this.load.image('Gra', `assets/habitats/Gra.png`);
   this.load.image('Wat', `assets/habitats/Wat.png`);
@@ -130,19 +130,28 @@ function create(this: Phaser.Scene) {
 
   for (let r = 0; r < 3; r++) {
     for (let c = 0; c < 10; c++) {
-      const x = 20 + c * 60;
-      const y = 500 + r * 60;
+      const x = 50 + c * 60;
+      const y = 530 + r * 60;
       const typeList = [
         [["Gra", "Fly"], ["Gra", "Poi"], ["Bug", "Fly"], ["Poi", "Non"], ["Psy", "Fai"], ["Psy", "Fai"], ["Wat", "Non"], ["Nor", "Fly"], ["Psy", "Non"], ["Roc", "Non"]],
         [["Wat", "Wat"], ["Wat", "Non"], ["Gra", "Psy"], ["Nor", "Non"], ["Fig", "Non"], ["Bug", "Gro"], ["Bug", "Non"], ["Dra", "Non"], ["Gra", "Dra"], ["Ele", "Poi"]],
         [["Fir", "Fir"], ["Wat", "Psy"], ["Gro", "Non"], ["Ele", "Non"], ["Bug", "Non"], ["Ice", "Non"], ["Gra", "Non"], ["Ice", "Non"], ["Fir", "Non"], ["Fig", "Non"]]
       ]
       const typeOne = typeList[r][c][0]; const typeTwo = typeList[r][c][1];
-      const button = this.add.image(x, y, `pokemon${r}${c}`).setOrigin(0, 0)
+      const button = this.add.image(x, y, `pokemon${r}${c}`).setOrigin(0.5).setDepth(1)
         .setInteractive({ userHandCursor: true, draggable: true }).setDisplaySize(55, 55);
       button.on('pointerdown', () => {
         showPopup(this, r, c, `pokemon${r}${c}`);
+        for (const slot of placementSlots) {
+          if (slot.habitat.indexOf(typeOne) == -1 && slot.habitat.indexOf(typeTwo) == -1) {
+            slot.container.setVisible(false);
+          }
+        }
       });
+      button.on('drag', (pointer: Phaser.Input.Pointer,) => {
+        button.setPosition(pointer.x, pointer.y);
+        button.setDisplaySize(30, 30);
+      })
       button.on('dragend', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image) => {
         let placed = false;
         const cost = [
@@ -157,12 +166,20 @@ function create(this: Phaser.Scene) {
             playerEXP -= cost[r][c];
             const tower = placeTower(this, slot.x, slot.y, `pokemon${r}${c}`);
             if (tower) {
+              slot.container.setVisible(false);
               slot.occupied = true;
               placed = true;
               button.destroy();
             }
             break;
           }
+          if (!slot.occupied) {
+            slot.container.setVisible(true);
+          }
+        }
+        if (!placed) {
+          button.setPosition(x, y);
+          button.setDisplaySize(55, 55);
         }
       });
     }
@@ -194,9 +211,10 @@ function create(this: Phaser.Scene) {
     occupied: boolean
   }[] = [];
   const customSlotPositions = [
-    { x: 200, y: 85, habitat: "Nor, Fir, Fig"},
     { x: 220, y: 370, habitat: "Nor, Fir, Fig"},
-    { x: 395, y: 225, habitat: "Nor, Fir, Fig"},
+    { x: 492, y: 300, habitat: "Nor, Fir, Fig"},
+    { x: 1225, y: 215, habitat: "Nor, Fir, Fig"},
+    { x: 1200, y: 315, habitat: "Nor, Fir, Fig"},
     { x: 180, y: 205, habitat: "Gra, Poi, Ele"},
     { x: 348, y: 85, habitat: "Gra, Poi, Ele"},
     { x: 373, y: 348, habitat: "Gra, Poi, Ele"},
@@ -208,12 +226,14 @@ function create(this: Phaser.Scene) {
     { x: 1116, y: 353, habitat: "Fly, Bug"},
     { x: 1260, y: 353, habitat: "Fly, Bug"},
     { x: 1078, y: 45, habitat: "Roc, Gro"},
-    { x: 1430, y: 180, habitat: "Psy, Fai"}
+    { x: 215, y: 95, habitat: "Psy, Fai"},
+    { x: 395, y: 225, habitat: "Psy, Fai"},
+    { x: 1430, y: 180, habitat: "Any, Nor, Fir, Fig, Gra, Poi, Ele, Wat, Ice, Dra, Fly, Bug, Roc, Gro, Psy, Fai"},
   ];
   for (const pos of customSlotPositions) {
-    const rect = this.add.rectangle(0, 0, 54, 54, 0x444444, 0.2).setStrokeStyle(1, 0xffffff);
+    const rect = this.add.rectangle(0, 0, 30, 30, 0x444444, 0.2).setStrokeStyle(1, 0xffffff);
 
-    const img = this.add.image(0, 0, `${pos.habitat.substring(0, 3)}`).setDisplaySize(54, 54).setAlpha(0.8);
+    const img = this.add.image(0, 0, `${pos.habitat.substring(0, 3)}`).setDisplaySize(30, 30).setAlpha(0.2);
 
     const container = this.add.container(pos.x, pos.y, [img, rect]);
     container.setSize(54, 54);
