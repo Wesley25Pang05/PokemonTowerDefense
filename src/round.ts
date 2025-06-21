@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { award, changeLabel, currentHealth, enemiesGroup, updateHealth } from './index';
+import { award, changeLabel, currentHealth, enemiesGroup, lastPopUp, popupContainer, showPopup, updateHealth } from './index';
 import { Pichu } from './towers/Pichu';
 import { Eevee } from './towers/Eevee';
 import { Koffing } from './towers/Koffing';
@@ -31,6 +31,7 @@ import { Rockruff } from './towers/Rockruff';
 import { Toxel } from './towers/Toxel';
 import { Kubfu } from './towers/Kubfu';
 import { Stats } from './Stats';
+import { Towers } from './towers/Towers';
 
 export let area = "Pallet Town";
 export let enemies: Phaser.GameObjects.PathFollower[] = [];
@@ -493,6 +494,7 @@ function changeArea(scene: Phaser.Scene) {
     else if (area.indexOf("Round") != -1 && area.substring(area.indexOf("Round")+6, area.indexOf("/")) != area.substring(area.indexOf("/")+1)) {
         const slash = area.indexOf("/");
         area = area.substring(0, slash - 1) + (parseInt(area.charAt(slash-1))+1) + area.substring(area.indexOf("/"));
+        Towers.updateRounds();
         startRound(scene);
     }
     else {
@@ -500,35 +502,6 @@ function changeArea(scene: Phaser.Scene) {
         updateHealth(0, true);
         areaIndex++;
     }
-    Rowlet.updateRounds();
-    Oshawott.updateRounds();
-    Cyndaquil.updateRounds();
-    Oddish.updateRounds();
-    Poliwag.updateRounds();
-    Slowpoke.updateRounds();
-    Scyther.updateRounds();
-    Exeggcute.updateRounds();
-    Cubone.updateRounds();
-    Koffing.updateRounds();
-    Eevee.updateRounds();
-    Pichu.updateRounds();
-    MimeJr.updateRounds();
-    Tyrogue.updateRounds();
-    Wurmple.updateRounds();
-    Ralts.updateRounds();
-    Nincada.updateRounds();
-    Snorunt.updateRounds();
-    Clamperl.updateRounds();
-    Burmy.updateRounds();
-    Petilil.updateRounds();
-    Rufflet.updateRounds();
-    Goomy.updateRounds();
-    Bergmite.updateRounds();
-    Cosmog.updateRounds();
-    Applin.updateRounds();
-    Charcadet.updateRounds();
-    Rockruff.updateRounds();
-    Toxel.updateRounds();
-    Kubfu.updateRounds();
+    showPopup(lastPopUp.scene, lastPopUp.r, lastPopUp.c, lastPopUp.pokemon, lastPopUp.customMessage, lastPopUp.pokemonActive);
     changeLabel(area);
 }

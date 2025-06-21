@@ -3,7 +3,7 @@ import { enemies, statusPossibility, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
 export class Ralts extends Phaser.GameObjects.Image {
-  private range: number = 800;
+  private range: number = 600;
   private shootTimer?: Phaser.Time.TimerEvent;
   private static roundsPassed: number = -1;
 

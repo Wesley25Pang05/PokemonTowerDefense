@@ -30,6 +30,7 @@ import { Charcadet } from './towers/Charcadet';
 import { Rockruff } from './towers/Rockruff';
 import { Toxel } from './towers/Toxel';
 import { Kubfu } from './towers/Kubfu';
+import { Towers } from './towers/Towers';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -54,6 +55,7 @@ let path1: Phaser.Curves.Path;
 let path2: Phaser.Curves.Path;
 let areaLabel: Phaser.GameObjects.Text;
 let healthLabel: Phaser.GameObjects.Text;
+let currentTower: Towers;
 let enemies: Phaser.GameObjects.PathFollower[] = [];
 
 function preload(this: Phaser.Scene) {
@@ -89,6 +91,7 @@ function preload(this: Phaser.Scene) {
   }
   this.load.image('bg', 'hoenn3.png');
   this.load.text('pokemonDescriptions', 'data/pokemonDescriptions.txt');
+  this.load.text('pokemonUpgrades', 'data/pokemonUpgrades.txt');
   this.load.image('Nor', `assets/habitats/Nor.png`);
   this.load.image('Gra', `assets/habitats/Gra.png`);
   this.load.image('Wat', `assets/habitats/Wat.png`);
@@ -108,15 +111,16 @@ function preload(this: Phaser.Scene) {
 
 export let enemiesGroup: Phaser.Physics.Arcade.Group;
 const descriptionMap: Record<string, string> = {};
+const upgradeMap: Record<string, string[]> = {};
 const statsMap: Record<string, string> = {};
 let playerHealth = 0; export let currentHealth = 0;
 let playerDef = 0; let playerSpDef = 0;
-let playerEXP = 2500;
+let playerEXP = 2000;
 
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
 
-  const text = this.cache.text.get('pokemonDescriptions');
+  let text = this.cache.text.get('pokemonDescriptions');
   if (text) {
     const lines = text.split('\n').map((line: string) => line.trim()).filter(Boolean);
 
@@ -125,6 +129,16 @@ function create(this: Phaser.Scene) {
       const description = lines[i + 1];
       descriptionMap[key] = description;
       statsMap[key] = lines[i + 2];
+    }
+  }
+  text = this.cache.text.get('pokemonUpgrades');
+  if (text) {
+    const lines = text.split('\n').map((line: string) => line.trim()).filter(Boolean);
+
+    for (let i = 0; i < lines.length - 1; i += 9) {
+      const key = lines[i];
+      upgradeMap[key] = [lines[i + 1], lines[i + 2], lines[i + 3],
+      lines[i + 4], lines[i + 5], lines[i + 6], lines[i + 7], lines[i + 8]];
     }
   }
 
@@ -141,7 +155,7 @@ function create(this: Phaser.Scene) {
       const button = this.add.image(x, y, `pokemon${r}${c}`).setOrigin(0.5).setDepth(1)
         .setInteractive({ userHandCursor: true, draggable: true }).setDisplaySize(55, 55);
       button.on('pointerdown', () => {
-        showPopup(this, r, c, `pokemon${r}${c}`);
+        showPopup(this, r, c, `pokemon${r}${c}`, "", false);
         for (const slot of placementSlots) {
           if (slot.habitat.indexOf(typeOne) == -1 && slot.habitat.indexOf(typeTwo) == -1) {
             slot.container.setVisible(false);
@@ -155,9 +169,9 @@ function create(this: Phaser.Scene) {
       button.on('dragend', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image) => {
         let placed = false;
         const cost = [
-          [2280, 2400, 3400, 2400, 2250, 1330, 2490, 2530, 10000, 1900],
-          [2080, 1600, 2450, 2250, 1400, 1960, 1590, 4200, 2000, 1640],
-          [1920, 2350, 2450, 1050, 1550, 2000, 2150, 2440, 1700, 13000]
+          [2640, 1840, 3220, 1780, 2570, 1950, 1920, 2780, 5540, 2460],
+          [1910, 1610, 1900, 1880, 1440, 2200, 1670, 2220, 2590, 1780],
+          [1976, 2110, 2440, 1650, 1380, 2000, 2550, 2630, 1940, 12600]
         ]
         for (const slot of placementSlots) {
           const bounds = slot.container.getBounds();
@@ -173,14 +187,12 @@ function create(this: Phaser.Scene) {
             }
             break;
           }
-          if (!slot.occupied) {
-            slot.container.setVisible(true);
-          }
         }
         if (!placed) {
           button.setPosition(x, y);
           button.setDisplaySize(55, 55);
         }
+        for (const slot of placementSlots) { if (!slot.occupied) { slot.container.setVisible(true); } }
       });
     }
   }
@@ -222,7 +234,7 @@ function create(this: Phaser.Scene) {
     { x: 1000, y: 300, habitat: "Wat, Ice, Dra"},
     { x: 850, y: 170, habitat: "Wat, Ice, Dra"},
     { x: 528, y: 136, habitat: "Fly, Bug"},
-    { x: 523, y: 380, habitat: "Fly, Bug"},
+    { x: 528, y: 380, habitat: "Fly, Bug"},
     { x: 1116, y: 353, habitat: "Fly, Bug"},
     { x: 1260, y: 353, habitat: "Fly, Bug"},
     { x: 1078, y: 45, habitat: "Roc, Gro"},
@@ -252,7 +264,7 @@ function create(this: Phaser.Scene) {
     stroke: '#000000',
     strokeThickness: 4,
   });
-  healthLabel = this.add.text(1125, 10, `Place your starter Pokémon! 💰2500`, {
+  healthLabel = this.add.text(1125, 10, `Place your starter Pokémon! 💰2000`, {
     fontSize: '24px',
     fontFamily: 'Arial',
     stroke: '#000000',
@@ -263,8 +275,18 @@ function create(this: Phaser.Scene) {
   paths(this);
 }
 
-let popupContainer: Phaser.GameObjects.Container;
-function showPopup(scene: Phaser.Scene, r: number, c: number, pokemon: string) {
+type popUpData = {
+  scene: Phaser.Scene;
+  r: number;
+  c: number;
+  pokemon: string;
+  customMessage: string;
+  pokemonActive: boolean;
+};
+export let lastPopUp : popUpData;
+export let popupContainer: Phaser.GameObjects.Container;
+export function showPopup(scene: Phaser.Scene, r: number, c: number, pokemon: string, 
+  customMessage: string, pokemonActive: boolean) {
   if (popupContainer) popupContainer.destroy();
 
   const boxX = 640;
@@ -277,19 +299,69 @@ function showPopup(scene: Phaser.Scene, r: number, c: number, pokemon: string) {
     .setStrokeStyle(2, 0xffffff);
   popupContainer.add(background);
 
-  const description = descriptionMap[pokemon] ?? 'No description available.';
+  let description = descriptionMap[pokemon] ?? 'No description available.';
+  if (customMessage != "") {
+    description = customMessage;
+  }
   const stat = statsMap[pokemon] ?? 'No description available.';
   const label = scene.add.text(boxX + 20, boxY + 10, description, {
     fontSize: '20px',
     color: '#ffffff',
     wordWrap: { width: 650 }
   });
-  const stats = scene.add.text(boxX + 20, boxY + 150, stat, {
-    fontSize: '20px',
-    color: '#ffffff',
-    wordWrap: { width: 650 }
-  });
-  popupContainer.add(stats);
+  popupContainer.add(label);
+  if (pokemonActive) {
+    const stats = scene.add.text(boxX + 20, boxY + 154, currentTower.returnStats(), {
+      fontSize: '12px',
+      color: '#ffffff',
+      wordWrap: { width: 650 }
+    });
+    popupContainer.add(stats);
+  }
+  else {
+    const stats = scene.add.text(boxX + 20, boxY + 154, stat, {
+      fontSize: '12px',
+      color: '#ffffff',
+      wordWrap: { width: 650 }
+    });
+    popupContainer.add(stats);
+  }
+
+  for (let row = 0; row < 2; row++) {
+    for (let col = 0; col < 4; col++) {
+      const x = boxX + 20 + col * 150;
+      const y = boxY + 75 + row * 35;
+      const upgradeString = upgradeMap[pokemon][col + row * 4];
+      const upgradePrice = upgradeString.indexOf("$") != -1 ? parseInt(upgradeString.substring(1,
+        upgradeString.indexOf('+'))) : 0;
+      const upgradeLevel = upgradeString.indexOf("LVL") != -1 ? parseInt(upgradeString.substring(upgradeString.indexOf('LVL')
+        + 3, upgradeString.indexOf(':'))) : 0;
+      let colorOfBox = playerEXP >= upgradePrice && currentTower && currentTower.getRounds() >= upgradeLevel && pokemonActive &&
+      currentTower.getPath(row == 0) == col && (col < 2 || currentTower.getPath(row == 1) < 3) ? 0xFFFF00 : 0x800000;
+      if (currentTower && (row == 0 && currentTower.getPath(true) > col || row == 1 && currentTower.getPath(false) > col) && pokemonActive) {
+        colorOfBox = 0x90EE90;
+      }
+      const rect = scene.add.rectangle(x, y, 145, 30, colorOfBox).setInteractive()
+        .setOrigin(0, 0)
+        .setStrokeStyle(1, 0x000000);
+      rect.on('pointerover', () => {
+        showPopup(scene, r, c, pokemon, upgradeString, pokemonActive);
+      })
+      rect.on('pointerdown', () => {
+        if (colorOfBox == 0xFFFF00) {
+          award(-1 * upgradePrice);
+          if (row == 0) {
+            currentTower.upgradeFirstPath(true);
+          }
+          else {
+            currentTower.upgradeFirstPath(false);
+          }
+        }
+      })
+      popupContainer.add(rect);
+    }
+  }
+
   const pokemonKeys = [`pokemon${r}${c}0`, `pokemon${r}${c}1`, `pokemon${r}${c}2`];
 
   for (let i = 0; i < 3; i++) {
@@ -301,6 +373,8 @@ function showPopup(scene: Phaser.Scene, r: number, c: number, pokemon: string) {
       .setDisplaySize(55, 55);
     popupContainer.add(pkm);
   }
+
+  lastPopUp = {scene: scene, r: r, c: c, pokemon: pokemon, customMessage: customMessage, pokemonActive: pokemonActive};
 }
 
 function update(this: Phaser.Scene, time: number, delta: number) {
@@ -316,171 +390,151 @@ export function changeLabel(area: string) {
 }
 
 function placeTower(scene: Phaser.Scene, x: number, y: number, key: string): Phaser.GameObjects.Image | undefined {
-  let tower: Phaser.GameObjects.Image | undefined;
+  let tower: Towers | undefined;
 
   switch (key) {
     case "pokemon00":
-      tower = new Rowlet(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5).setInteractive();
-      playerHealth += 68; playerDef += 11; playerSpDef += 10;
-      updateHealth(68, true);
-      tower.on('pointerdown', () => {
-        
-      });
+      tower = new Rowlet(scene, x, y);
+      updateUserHP(scene, tower, key);
       break;
     case "pokemon10":
-      tower = new Oshawott(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 55; playerDef += 9; playerSpDef += 9;
-      updateHealth(55, true);
+      tower = new Oshawott(scene, x, y);
+      updateUserHP(scene, tower, key);
       break;
+    /*
     case "pokemon20":
-      tower = new Cyndaquil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 39; playerDef += 8.6; playerSpDef += 10;
-      updateHealth(39, true);
+      tower = new Cyndaquil(scene, x, y);
+      updateUserHP(scene, tower, key, 39, 8.6, 10);
       break;
     case "pokemon01":
-      tower = new Oddish(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Oddish(scene, x, y);
       scene.physics.add.existing(tower);
-      playerHealth += 45; playerDef += 11; playerSpDef += 13;
-      updateHealth(45, true);
+      updateUserHP(scene, tower, key, 45, 11, 13);
       break;
     case "pokemon11":
-      tower = new Poliwag(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 40; playerDef += 8; playerSpDef += 8;
-      updateHealth(40, true);
+      tower = new Poliwag(scene, x, y);
+      updateUserHP(scene, tower, key, 40, 8, 8);
       break;
     case "pokemon21":
-      tower = new Slowpoke(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 90; playerDef += 13; playerSpDef += 8;
-      updateHealth(90, true);
+      tower = new Slowpoke(scene, x, y);
+      updateUserHP(scene, tower, key, 90, 13, 8);
       break;
     case "pokemon02":
-      tower = new Scyther(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 70; playerDef += 16; playerSpDef += 16;
-      updateHealth(70, true);
+      tower = new Scyther(scene, x, y);
+      updateUserHP(scene, tower, key, 70, 16, 16);
       break;
     case "pokemon12":
-      tower = new Exeggcute(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
+      tower = new Exeggcute(scene, x, y);
       scene.physics.add.existing(tower);
-      playerHealth += 60; playerDef += 16; playerSpDef += 9;
-      updateHealth(60, true);
+      updateUserHP(scene, tower, key, 60, 16, 9);
       break;
     case "pokemon22":
-      tower = new Cubone(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 50; playerDef += 19; playerSpDef += 10;
-      updateHealth(50, true);
+      tower = new Cubone(scene, x, y);
+      updateUserHP(scene, tower, key, 50, 19, 10);
       break;
     case "pokemon03":
-      tower = new Koffing(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 40; playerDef += 19; playerSpDef += 9;
-      updateHealth(40, true);
+      tower = new Koffing(scene, x, y);
+      updateUserHP(scene, tower, key, 40, 19, 9);
       break;
     case "pokemon13":
-      tower = new Eevee(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 55; playerDef += 10; playerSpDef += 13;
-      updateHealth(55, true);
+      tower = new Eevee(scene, x, y);
+      updateUserHP(scene, tower, key, 55, 10, 13);
       break;
     case "pokemon23":
-      tower = new Pichu(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 20; playerDef += 3; playerSpDef += 7;
-      updateHealth(20, true);
+      tower = new Pichu(scene, x, y);
+      updateUserHP(scene, tower, key, 20, 3, 7);
       break;
     case "pokemon04":
-      tower = new MimeJr(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 20; playerDef += 9; playerSpDef += 18;
-      updateHealth(20, true);
+      tower = new MimeJr(scene, x, y);
+      updateUserHP(scene, tower, key, 20, 9, 18);
       break;
     case "pokemon14":
-      tower = new Tyrogue(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 35; playerDef += 7; playerSpDef += 7;
-      updateHealth(35, true);
+      tower = new Tyrogue(scene, x, y);
+      updateUserHP(scene, tower, key, 35, 7, 7);
       break;
     case "pokemon24":
-      tower = new Wurmple(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 45; playerDef += 7; playerSpDef += 6;
-      updateHealth(45, true);
+      tower = new Wurmple(scene, x, y);
+      updateUserHP(scene, tower, key, 45, 7, 6);
       break;
     case "pokemon05":
-      tower = new Ralts(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 28; playerDef += 5; playerSpDef += 7;
-      updateHealth(28, true);
+      tower = new Ralts(scene, x, y);
+      updateUserHP(scene, tower, key, 28, 5, 7);
       break;
     case "pokemon15":
-      tower = new Nincada(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 31; playerDef += 18; playerSpDef += 6;
-      updateHealth(31, true);
+      tower = new Nincada(scene, x, y);
+      updateUserHP(scene, tower, key, 31, 18, 6);
       break;
     case "pokemon25":
-      tower = new Snorunt(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 50; playerDef += 10; playerSpDef += 10;
-      updateHealth(50, true);
+      tower = new Snorunt(scene, x, y);
+      updateUserHP(scene, tower, key, 50, 10, 10);
       break;
     case "pokemon06":
-      tower = new Clamperl(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 35; playerDef += 17; playerSpDef += 11;
-      updateHealth(35, true);
+      tower = new Clamperl(scene, x, y);
+      updateUserHP(scene, tower, key, 35, 17, 11);
       break;
     case "pokemon16":
-      tower = new Burmy(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 40; playerDef += 9; playerSpDef += 9;
-      updateHealth(40, true);
+      tower = new Burmy(scene, x, y);
+      updateUserHP(scene, tower, key, 40, 9, 9);
       break;
     case "pokemon26":
-      tower = new Petilil(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 45; playerDef += 10; playerSpDef += 10;
-      updateHealth(45, true);
+      tower = new Petilil(scene, x, y);
+      updateUserHP(scene, tower, key, 45, 10, 10);
       break;
     case "pokemon07":
-      tower = new Rufflet(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 70; playerDef += 10; playerSpDef += 10;
-      updateHealth(70, true);
+      tower = new Rufflet(scene, x, y);
+      updateUserHP(scene, tower, key, 70, 10, 10);
       break;
     case "pokemon17":
-      tower = new Goomy(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 45; playerDef += 7; playerSpDef += 15;
-      updateHealth(45, true);
+      tower = new Goomy(scene, x, y);
+      updateUserHP(scene, tower, key, 45, 7, 15);
       break;
     case "pokemon27":
-      tower = new Bergmite(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 55; playerDef += 17; playerSpDef += 7;
-      updateHealth(55, true);
+      tower = new Bergmite(scene, x, y);
+      updateUserHP(scene, tower, key, 55, 17, 7);
       break;
     case "pokemon08":
-      tower = new Cosmog(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 43; playerDef += 6.2; playerSpDef += 6.2;
-      updateHealth(43, true);
+      tower = new Cosmog(scene, x, y);
+      updateUserHP(scene, tower, key, 43, 6.2, 6.2);
       break;
     case "pokemon18":
-      tower = new Applin(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 40; playerDef += 16; playerSpDef += 8;
-      updateHealth(40, true);
+      tower = new Applin(scene, x, y);
+      updateUserHP(scene, tower, key, 40, 16, 8);
       break;
     case "pokemon28":
-      tower = new Charcadet(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 40; playerDef += 8; playerSpDef += 8;
-      updateHealth(40, true);
+      tower = new Charcadet(scene, x, y);
+      updateUserHP(scene, tower, key, 40, 8, 8);
       break;
     case "pokemon09":
-      tower = new Rockruff(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 45; playerDef += 8; playerSpDef += 8;
-      updateHealth(45, true);
+      tower = new Rockruff(scene, x, y);
+      updateUserHP(scene, tower, key, 45, 8, 8);
       break;
     case "pokemon19":
-      tower = new Toxel(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 40; playerDef += 7; playerSpDef += 7;
-      updateHealth(40, true);
+      tower = new Toxel(scene, x, y);
+      updateUserHP(scene, tower, key, 40, 7, 7);
       break;
     case "pokemon29":
-      tower = new Kubfu(scene, x, y).setDisplaySize(30, 30).setOrigin(0.5);
-      playerHealth += 60; playerDef += 12; playerSpDef += 10;
-      updateHealth(60, true);
+      tower = new Kubfu(scene, x, y);
+      updateUserHP(scene, tower, key, 60, 12, 10);
       break;
+    */
   }
   return tower;
 }
 
+function updateUserHP(scene: Phaser.Scene, tower: Towers, mon: string) {
+  playerHealth += Towers.allHP(); playerDef += Towers.allDEF(); playerSpDef += Towers.allSPDEF(); updateHealth(0, true);
+  currentTower = tower;
+  showPopup(scene, mon.slice(-2).split('').map(d => Number(d))[0], mon.slice(-2).split('').map(d => Number(d))[1], mon, "", true);
+  tower.on('pointerdown', () => {
+    const numbers = mon.slice(-2).split('').map(d => Number(d));
+    currentTower = tower;
+    showPopup(scene, numbers[0], numbers[1], mon, "", true);
+  });
+}
+
 export function award(exp: integer) {
   playerEXP += exp;
-  healthLabel.setText(`❤️${currentHealth}   ⛊${Math.round(playerDef)}   ⛉${Math.round(playerSpDef)}   💰${Math.round(playerEXP)}`);
+  healthLabel.setText(`❤️${currentHealth}/${playerHealth}   ⛊${Math.round(playerDef)}   ⛉${Math.round(playerSpDef)}   💰${Math.round(playerEXP)}`);
 }
 
 export function updateHealth(heal: integer, special: boolean) {
@@ -495,6 +549,6 @@ export function updateHealth(heal: integer, special: boolean) {
     else {
       currentHealth = Math.max(-1, currentHealth + Math.round(heal / reduce));
     }
-    healthLabel.setText(`❤️${currentHealth}   ⛊${Math.round(playerDef)}   ⛉${Math.round(playerSpDef)}   💰${Math.round(playerEXP)}`);
+    healthLabel.setText(`❤️${currentHealth}/${playerHealth}   ⛊${Math.round(playerDef)}   ⛉${Math.round(playerSpDef)}   💰${Math.round(playerEXP)}`);
   }
 }

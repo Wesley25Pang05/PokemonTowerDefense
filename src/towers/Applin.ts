@@ -3,7 +3,7 @@ import { enemies, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
 
 export class Applin extends Phaser.GameObjects.Image {
-  private range: number = 2000;
+  private range: number = 1000;
   private shootTimer?: Phaser.Time.TimerEvent;
   private static roundsPassed: number = -1;
 

@@ -1,21 +1,19 @@
 import Phaser from 'phaser';
 import { enemies, takeDamage, } from '../round';
 import { enemiesGroup } from '../index';
+import { Towers } from './Towers';
 
-export class Oshawott extends Phaser.GameObjects.Image {
-  private range: number = 150;
+export class Oshawott extends Towers {
   private shootTimer?: Phaser.Time.TimerEvent;
-  private static roundsPassed: number = -1;
+
+  private waterLevel: number = 0;
 
   constructor(
     scene: Phaser.Scene,
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon10');
-    this.setOrigin(0.5);
-    scene.add.existing(this);
-    Oshawott.roundsPassed++;
+    super(scene, x, y, 'pokemon10', 150, 63, 55, 9, 9, 1, "Special", 3);
     this.startAttacking(scene);
   }
 
@@ -34,7 +32,7 @@ export class Oshawott extends Phaser.GameObjects.Image {
 
   private findNearestEnemy(): Phaser.GameObjects.PathFollower | null {
     let closestEnemy: Phaser.GameObjects.PathFollower | null = null;
-    let closestDistance = this.range;
+    let closestDistance = this.getRange();
     for (const enemy of enemies) {
       if (!enemy.active) continue;
 
@@ -59,7 +57,7 @@ export class Oshawott extends Phaser.GameObjects.Image {
         }
       });
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Water", "Special", 15.12, 1/24);
+        takeDamage((enemy as any), scene, "Water", this.getAttackType(), 15.12, 1/24);
         projectile.destroy();
         scene.events.off('update', updateHandler);
     });
@@ -78,9 +76,11 @@ export class Oshawott extends Phaser.GameObjects.Image {
     scene.events.on('update', updateHandler);
   }
 
-  public static updateRounds() {
-    if (this.roundsPassed != -1) {
-      this.roundsPassed++;
+  public returnStats() {
+    let stats = super.returnStats();
+    if (this.waterLevel == 0) {
+      stats += " | ⚔️0.300s 🎯40";
     }
+    return stats;
   }
 }

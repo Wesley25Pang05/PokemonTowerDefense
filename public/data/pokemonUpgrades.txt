@@ -1,0 +1,299 @@
+pokemon00
+$150+LVL15: Razor Leaf is an upgrade of Leafage, 🎯40->55 ⚔️2.000s->1.000s 💥1/24->1/8.
+$700+LVL30: Leaf Blade is an upgrade of Razor Leaf, 🎯55->90 damage.
+$2340+LVL34: Rowlet evolves into Dartrix ❤️10 ⛊4 ⛉4 🥊20 and learns a ghost move, ⚔️0.800s 🎯40 Shadow Sneak.
+$3120+LVL68: Dartrix evolves into Alolan Decidueye ⛉6 🥊32 and upgrades Shadow Sneak to Spirit Shackle, 🎯40->80.
+$0+LVL5: Rowlet gains it's ability Overgrow which increases damage of Leafage, Razor Leaf, and Leaf Blade by 25%.
+$0+LVL18: Rowlet learns Growl, -🥊100% to all its attacks.
+$3090+LVL34: Rowlet evolves into Dartrix ❤️10 ⛊4 ⛉4 🥊20 and learns a fighting move, ⚔️1.300s 🎯65 Low Sweep.
+$3120+LVL72: Dartrix evolves into Alolan Decidueye ❤️10 ⛊1 ⛉5 🥊37 and upgrades Low Sweep to Triple Arrows, 🎯65->30x3 💥1/24->1/8 -⛊50%.
+
+pokemon10
+$200+LVL7: Water Pulse is an upgade of Water Gun, 🎯40->60 ⚔️0.300s->1.300s.
+$600+LVL23: Surf is an upgrade of Water Pulse, 🎯60->90.
+$1980+LVL34: Oshawott evolves into Dewott ❤️20 ⛊3 ⛉3 ✨20 and upgrades Surf to Hydro Pump, 🎯90 -> 110, ⚔️1.300s -> 3.000s.
+$3680+LVL72: Dewott evolves into Unovan Samurott ❤️20 ⛊5 ⛉2 ✨25 and upgrades Hydro Pump to Hydro Cannon, 🎯110->150 ⚔️3.000s->5.000s.
+$0+LVL5: Oshawott gains it's ability Torrent which increases damage of Water Gun, Water Pulse, Surf, Hydro Pump, and Hydro Cannon by 25%.
+$0+LVL13: Oshawott learns Focus Energy, 💥1/24->1/8 to all its attacks.
+$990+LVL34: Oshawott evolves into Dewott ❤️20 ⛊3 ⛉3 🥊12 and forgets Surf Pulse for dark move Sucker Punch, 🎯70 ⚔️0.800s 🏹300.
+$2520+LVL72: Dewott evolves into Hisuian Samurott ❤️15 ⛊4 ⛉1 🥊33 and upgrades Sucker Punch to Ceaseless Edge, 🎯70->65 ⚔️0.400s 🏹900.
+
+pokemon20
+Cyndaquil has yet learned stuff because the owner is lazy at the moment.
+Cyndaquil has yet learned stuff because the owner is lazy at the moment.
+Cyndaquil has yet learned stuff because the owner is lazy at the moment.
+Cyndaquil has yet learned stuff because the owner is lazy at the moment.
+Cyndaquil has yet learned stuff because the owner is lazy at the moment.
+Cyndaquil has yet learned stuff because the owner is lazy at the moment.
+Cyndaquil has yet learned stuff because the owner is lazy at the moment.
+Cyndaquil has yet learned stuff because the owner is lazy at the moment.
+
+pokemon01
+Oddish has yet learned stuff because the owner is lazy at the moment.
+Oddish has yet learned stuff because the owner is lazy at the moment.
+Oddish has yet learned stuff because the owner is lazy at the moment.
+Oddish has yet learned stuff because the owner is lazy at the moment.
+Oddish has yet learned stuff because the owner is lazy at the moment.
+Oddish has yet learned stuff because the owner is lazy at the moment.
+Oddish has yet learned stuff because the owner is lazy at the moment.
+Oddish has yet learned stuff because the owner is lazy at the moment.
+
+pokemon11
+Poliwag has yet learned stuff because the owner is lazy at the moment.
+Poliwag has yet learned stuff because the owner is lazy at the moment.
+Poliwag has yet learned stuff because the owner is lazy at the moment.
+Poliwag has yet learned stuff because the owner is lazy at the moment.
+Poliwag has yet learned stuff because the owner is lazy at the moment.
+Poliwag has yet learned stuff because the owner is lazy at the moment.
+Poliwag has yet learned stuff because the owner is lazy at the moment.
+Poliwag has yet learned stuff because the owner is lazy at the moment.
+
+pokemon21
+Slowpoke has yet learned stuff because the owner is lazy at the moment.
+Slowpoke has yet learned stuff because the owner is lazy at the moment.
+Slowpoke has yet learned stuff because the owner is lazy at the moment.
+Slowpoke has yet learned stuff because the owner is lazy at the moment.
+Slowpoke has yet learned stuff because the owner is lazy at the moment.
+Slowpoke has yet learned stuff because the owner is lazy at the moment.
+Slowpoke has yet learned stuff because the owner is lazy at the moment.
+Slowpoke has yet learned stuff because the owner is lazy at the moment.
+
+pokemon02
+Scyther has yet learned stuff because the owner is lazy at the moment.
+Scyther has yet learned stuff because the owner is lazy at the moment.
+Scyther has yet learned stuff because the owner is lazy at the moment.
+Scyther has yet learned stuff because the owner is lazy at the moment.
+Scyther has yet learned stuff because the owner is lazy at the moment.
+Scyther has yet learned stuff because the owner is lazy at the moment.
+Scyther has yet learned stuff because the owner is lazy at the moment.
+Scyther has yet learned stuff because the owner is lazy at the moment.
+
+pokemon12
+Exeggcute has yet learned stuff because the owner is lazy at the moment.
+Exeggcute has yet learned stuff because the owner is lazy at the moment.
+Exeggcute has yet learned stuff because the owner is lazy at the moment.
+Exeggcute has yet learned stuff because the owner is lazy at the moment.
+Exeggcute has yet learned stuff because the owner is lazy at the moment.
+Exeggcute has yet learned stuff because the owner is lazy at the moment.
+Exeggcute has yet learned stuff because the owner is lazy at the moment.
+Exeggcute has yet learned stuff because the owner is lazy at the moment.
+
+pokemon22
+Cubone has yet learned stuff because the owner is lazy at the moment.
+Cubone has yet learned stuff because the owner is lazy at the moment.
+Cubone has yet learned stuff because the owner is lazy at the moment.
+Cubone has yet learned stuff because the owner is lazy at the moment.
+Cubone has yet learned stuff because the owner is lazy at the moment.
+Cubone has yet learned stuff because the owner is lazy at the moment.
+Cubone has yet learned stuff because the owner is lazy at the moment.
+Cubone has yet learned stuff because the owner is lazy at the moment.
+
+pokemon03
+Koffing has yet learned stuff because the owner is lazy at the moment.
+Koffing has yet learned stuff because the owner is lazy at the moment.
+Koffing has yet learned stuff because the owner is lazy at the moment.
+Koffing has yet learned stuff because the owner is lazy at the moment.
+Koffing has yet learned stuff because the owner is lazy at the moment.
+Koffing has yet learned stuff because the owner is lazy at the moment.
+Koffing has yet learned stuff because the owner is lazy at the moment.
+Koffing has yet learned stuff because the owner is lazy at the moment.
+
+pokemon13
+Eevee has yet learned stuff because the owner is lazy at the moment.
+Eevee has yet learned stuff because the owner is lazy at the moment.
+Eevee has yet learned stuff because the owner is lazy at the moment.
+Eevee has yet learned stuff because the owner is lazy at the moment.
+Eevee has yet learned stuff because the owner is lazy at the moment.
+Eevee has yet learned stuff because the owner is lazy at the moment.
+Eevee has yet learned stuff because the owner is lazy at the moment.
+Eevee has yet learned stuff because the owner is lazy at the moment.
+
+pokemon23
+Pichu has yet learned stuff because the owner is lazy at the moment.
+Pichu has yet learned stuff because the owner is lazy at the moment.
+Pichu has yet learned stuff because the owner is lazy at the moment.
+Pichu has yet learned stuff because the owner is lazy at the moment.
+Pichu has yet learned stuff because the owner is lazy at the moment.
+Pichu has yet learned stuff because the owner is lazy at the moment.
+Pichu has yet learned stuff because the owner is lazy at the moment.
+Pichu has yet learned stuff because the owner is lazy at the moment.
+
+pokemon04
+Mime Jr. has yet learned stuff because the owner is lazy at the moment.
+Mime Jr. has yet learned stuff because the owner is lazy at the moment.
+Mime Jr. has yet learned stuff because the owner is lazy at the moment.
+Mime Jr. has yet learned stuff because the owner is lazy at the moment.
+Mime Jr. has yet learned stuff because the owner is lazy at the moment.
+Mime Jr. has yet learned stuff because the owner is lazy at the moment.
+Mime Jr. has yet learned stuff because the owner is lazy at the moment.
+Mime Jr. has yet learned stuff because the owner is lazy at the moment.
+
+pokemon14
+Tyrogue has yet learned stuff because the owner is lazy at the moment.
+Tyrogue has yet learned stuff because the owner is lazy at the moment.
+Tyrogue has yet learned stuff because the owner is lazy at the moment.
+Tyrogue has yet learned stuff because the owner is lazy at the moment.
+Tyrogue has yet learned stuff because the owner is lazy at the moment.
+Tyrogue has yet learned stuff because the owner is lazy at the moment.
+Tyrogue has yet learned stuff because the owner is lazy at the moment.
+Tyrogue has yet learned stuff because the owner is lazy at the moment.
+
+pokemon24
+Wurmple has yet learned stuff because the owner is lazy at the moment.
+Wurmple has yet learned stuff because the owner is lazy at the moment.
+Wurmple has yet learned stuff because the owner is lazy at the moment.
+Wurmple has yet learned stuff because the owner is lazy at the moment.
+Wurmple has yet learned stuff because the owner is lazy at the moment.
+Wurmple has yet learned stuff because the owner is lazy at the moment.
+Wurmple has yet learned stuff because the owner is lazy at the moment.
+Wurmple has yet learned stuff because the owner is lazy at the moment.
+
+pokemon05
+Ralts has yet learned stuff because the owner is lazy at the moment.
+Ralts has yet learned stuff because the owner is lazy at the moment.
+Ralts has yet learned stuff because the owner is lazy at the moment.
+Ralts has yet learned stuff because the owner is lazy at the moment.
+Ralts has yet learned stuff because the owner is lazy at the moment.
+Ralts has yet learned stuff because the owner is lazy at the moment.
+Ralts has yet learned stuff because the owner is lazy at the moment.
+Ralts has yet learned stuff because the owner is lazy at the moment.
+
+pokemon15
+Nincada has yet learned stuff because the owner is lazy at the moment.
+Nincada has yet learned stuff because the owner is lazy at the moment.
+Nincada has yet learned stuff because the owner is lazy at the moment.
+Nincada has yet learned stuff because the owner is lazy at the moment.
+Nincada has yet learned stuff because the owner is lazy at the moment.
+Nincada has yet learned stuff because the owner is lazy at the moment.
+Nincada has yet learned stuff because the owner is lazy at the moment.
+Nincada has yet learned stuff because the owner is lazy at the moment.
+
+pokemon25
+Snorunt has yet learned stuff because the owner is lazy at the moment.
+Snorunt has yet learned stuff because the owner is lazy at the moment.
+Snorunt has yet learned stuff because the owner is lazy at the moment.
+Snorunt has yet learned stuff because the owner is lazy at the moment.
+Snorunt has yet learned stuff because the owner is lazy at the moment.
+Snorunt has yet learned stuff because the owner is lazy at the moment.
+Snorunt has yet learned stuff because the owner is lazy at the moment.
+Snorunt has yet learned stuff because the owner is lazy at the moment.
+
+pokemon06
+Clamperl has yet learned stuff because the owner is lazy at the moment.
+Clamperl has yet learned stuff because the owner is lazy at the moment.
+Clamperl has yet learned stuff because the owner is lazy at the moment.
+Clamperl has yet learned stuff because the owner is lazy at the moment.
+Clamperl has yet learned stuff because the owner is lazy at the moment.
+Clamperl has yet learned stuff because the owner is lazy at the moment.
+Clamperl has yet learned stuff because the owner is lazy at the moment.
+Clamperl has yet learned stuff because the owner is lazy at the moment.
+
+pokemon16
+Burmy has yet learned stuff because the owner is lazy at the moment.
+Burmy has yet learned stuff because the owner is lazy at the moment.
+Burmy has yet learned stuff because the owner is lazy at the moment.
+Burmy has yet learned stuff because the owner is lazy at the moment.
+Burmy has yet learned stuff because the owner is lazy at the moment.
+Burmy has yet learned stuff because the owner is lazy at the moment.
+Burmy has yet learned stuff because the owner is lazy at the moment.
+Burmy has yet learned stuff because the owner is lazy at the moment.
+
+pokemon26
+Petilil has yet learned stuff because the owner is lazy at the moment.
+Petilil has yet learned stuff because the owner is lazy at the moment.
+Petilil has yet learned stuff because the owner is lazy at the moment.
+Petilil has yet learned stuff because the owner is lazy at the moment.
+Petilil has yet learned stuff because the owner is lazy at the moment.
+Petilil has yet learned stuff because the owner is lazy at the moment.
+Petilil has yet learned stuff because the owner is lazy at the moment.
+Petilil has yet learned stuff because the owner is lazy at the moment.
+
+pokemon07
+Rufflet has yet learned stuff because the owner is lazy at the moment.
+Rufflet has yet learned stuff because the owner is lazy at the moment.
+Rufflet has yet learned stuff because the owner is lazy at the moment.
+Rufflet has yet learned stuff because the owner is lazy at the moment.
+Rufflet has yet learned stuff because the owner is lazy at the moment.
+Rufflet has yet learned stuff because the owner is lazy at the moment.
+Rufflet has yet learned stuff because the owner is lazy at the moment.
+Rufflet has yet learned stuff because the owner is lazy at the moment.
+
+pokemon17
+Goomy has yet learned stuff because the owner is lazy at the moment.
+Goomy has yet learned stuff because the owner is lazy at the moment.
+Goomy has yet learned stuff because the owner is lazy at the moment.
+Goomy has yet learned stuff because the owner is lazy at the moment.
+Goomy has yet learned stuff because the owner is lazy at the moment.
+Goomy has yet learned stuff because the owner is lazy at the moment.
+Goomy has yet learned stuff because the owner is lazy at the moment.
+Goomy has yet learned stuff because the owner is lazy at the moment.
+
+pokemon27
+Bergmite has yet learned stuff because the owner is lazy at the moment.
+Bergmite has yet learned stuff because the owner is lazy at the moment.
+Bergmite has yet learned stuff because the owner is lazy at the moment.
+Bergmite has yet learned stuff because the owner is lazy at the moment.
+Bergmite has yet learned stuff because the owner is lazy at the moment.
+Bergmite has yet learned stuff because the owner is lazy at the moment.
+Bergmite has yet learned stuff because the owner is lazy at the moment.
+Bergmite has yet learned stuff because the owner is lazy at the moment.
+
+pokemon08
+Cosmog has yet learned stuff because the owner is lazy at the moment.
+Cosmog has yet learned stuff because the owner is lazy at the moment.
+Cosmog has yet learned stuff because the owner is lazy at the moment.
+Cosmog has yet learned stuff because the owner is lazy at the moment.
+Cosmog has yet learned stuff because the owner is lazy at the moment.
+Cosmog has yet learned stuff because the owner is lazy at the moment.
+Cosmog has yet learned stuff because the owner is lazy at the moment.
+Cosmog has yet learned stuff because the owner is lazy at the moment.
+
+pokemon18
+Applin has yet learned stuff because the owner is lazy at the moment.
+Applin has yet learned stuff because the owner is lazy at the moment.
+Applin has yet learned stuff because the owner is lazy at the moment.
+Applin has yet learned stuff because the owner is lazy at the moment.
+Applin has yet learned stuff because the owner is lazy at the moment.
+Applin has yet learned stuff because the owner is lazy at the moment.
+Applin has yet learned stuff because the owner is lazy at the moment.
+Applin has yet learned stuff because the owner is lazy at the moment.
+
+pokemon28
+Charcadet has yet learned stuff because the owner is lazy at the moment.
+Charcadet has yet learned stuff because the owner is lazy at the moment.
+Charcadet has yet learned stuff because the owner is lazy at the moment.
+Charcadet has yet learned stuff because the owner is lazy at the moment.
+Charcadet has yet learned stuff because the owner is lazy at the moment.
+Charcadet has yet learned stuff because the owner is lazy at the moment.
+Charcadet has yet learned stuff because the owner is lazy at the moment.
+Charcadet has yet learned stuff because the owner is lazy at the moment.
+
+pokemon09
+Rockruff has yet learned stuff because the owner is lazy at the moment.
+Rockruff has yet learned stuff because the owner is lazy at the moment.
+Rockruff has yet learned stuff because the owner is lazy at the moment.
+Rockruff has yet learned stuff because the owner is lazy at the moment.
+Rockruff has yet learned stuff because the owner is lazy at the moment.
+Rockruff has yet learned stuff because the owner is lazy at the moment.
+Rockruff has yet learned stuff because the owner is lazy at the moment.
+Rockruff has yet learned stuff because the owner is lazy at the moment.
+
+pokemon19
+Toxel has yet learned stuff because the owner is lazy at the moment.
+Toxel has yet learned stuff because the owner is lazy at the moment.
+Toxel has yet learned stuff because the owner is lazy at the moment.
+Toxel has yet learned stuff because the owner is lazy at the moment.
+Toxel has yet learned stuff because the owner is lazy at the moment.
+Toxel has yet learned stuff because the owner is lazy at the moment.
+Toxel has yet learned stuff because the owner is lazy at the moment.
+Toxel has yet learned stuff because the owner is lazy at the moment.
+
+pokemon29
+Kubfu has yet learned stuff because the owner is lazy at the moment.
+Kubfu has yet learned stuff because the owner is lazy at the moment.
+Kubfu has yet learned stuff because the owner is lazy at the moment.
+Kubfu has yet learned stuff because the owner is lazy at the moment.
+Kubfu has yet learned stuff because the owner is lazy at the moment.
+Kubfu has yet learned stuff because the owner is lazy at the moment.
+Kubfu has yet learned stuff because the owner is lazy at the moment.
+Kubfu has yet learned stuff because the owner is lazy at the moment.
