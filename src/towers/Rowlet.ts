@@ -18,7 +18,7 @@ export class Rowlet extends Towers {
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon00', 800, 55, 68, 11, 10, 1, "Physical", 3);
+    super(scene, x, y, 'pokemon00', 800, 55, 68, 11, 10, 100, "Physical", 3);
     this.startAttacking(scene);
   }
 

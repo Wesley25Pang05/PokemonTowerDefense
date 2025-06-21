@@ -115,7 +115,7 @@ const upgradeMap: Record<string, string[]> = {};
 const statsMap: Record<string, string> = {};
 let playerHealth = 0; export let currentHealth = 0;
 let playerDef = 0; let playerSpDef = 0;
-let playerEXP = 2000;
+let playerEXP = 20000;
 
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
@@ -337,7 +337,8 @@ export function showPopup(scene: Phaser.Scene, r: number, c: number, pokemon: st
       const upgradeLevel = upgradeString.indexOf("LVL") != -1 ? parseInt(upgradeString.substring(upgradeString.indexOf('LVL')
         + 3, upgradeString.indexOf(':'))) : 0;
       let colorOfBox = playerEXP >= upgradePrice && currentTower && currentTower.getRounds() >= upgradeLevel && pokemonActive &&
-      currentTower.getPath(row == 0) == col && (col < 2 || currentTower.getPath(row == 1) < 3) ? 0xFFFF00 : 0x800000;
+        currentTower.getPath(row == 0) == col && (col < 2 || currentTower.getPath(row == 1) < 3) && (col < 2 ||
+        currentTower.getPath(true) > 1 && currentTower.getPath(false) > 1) ? 0xFFFF00 : 0x800000;
       if (currentTower && (row == 0 && currentTower.getPath(true) > col || row == 1 && currentTower.getPath(false) > col) && pokemonActive) {
         colorOfBox = 0x90EE90;
       }
