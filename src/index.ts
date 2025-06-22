@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { paths, startRound, area } from './round';
+import { paths, startRound, area, badges } from './round';
 import { Rowlet } from './towers/Rowlet'
 import { Oshawott } from './towers/Oshawott';
 import { Cyndaquil } from './towers/Cyndaquil';
@@ -55,7 +55,8 @@ let path1: Phaser.Curves.Path;
 let path2: Phaser.Curves.Path;
 let areaLabel: Phaser.GameObjects.Text;
 let healthLabel: Phaser.GameObjects.Text;
-let currentTower: Towers;
+export let currentTower: Towers;
+export let currentMon: string;
 let enemies: Phaser.GameObjects.PathFollower[] = [];
 
 function preload(this: Phaser.Scene) {
@@ -115,7 +116,7 @@ const upgradeMap: Record<string, string[]> = {};
 const statsMap: Record<string, string> = {};
 let playerHealth = 0; export let currentHealth = 0;
 let playerDef = 0; let playerSpDef = 0;
-let playerEXP = 20000;
+let playerEXP = 30000; // Was 3000 changed for testing
 
 function create(this: Phaser.Scene) {
   this.add.rectangle(0, 480, 1920, 240, 0x2c2c2c).setOrigin(0, 0);
@@ -305,7 +306,7 @@ export function showPopup(scene: Phaser.Scene, r: number, c: number, pokemon: st
   }
   const stat = statsMap[pokemon] ?? 'No description available.';
   const label = scene.add.text(boxX + 20, boxY + 10, description, {
-    fontSize: '20px',
+    fontSize: '16px',
     color: '#ffffff',
     wordWrap: { width: 650 }
   });
@@ -387,7 +388,7 @@ function update(this: Phaser.Scene, time: number, delta: number) {
 }
 
 export function changeLabel(area: string) {
-  areaLabel.setText(area);
+  areaLabel.setText(area + " Badges: " + badges);
 }
 
 function placeTower(scene: Phaser.Scene, x: number, y: number, key: string): Phaser.GameObjects.Image | undefined {
@@ -519,16 +520,19 @@ function placeTower(scene: Phaser.Scene, x: number, y: number, key: string): Pha
       break;
     */
   }
+  Towers.updateAllStats(scene);
   return tower;
 }
 
-function updateUserHP(scene: Phaser.Scene, tower: Towers, mon: string) {
-  playerHealth += Towers.allHP(); playerDef += Towers.allDEF(); playerSpDef += Towers.allSPDEF(); updateHealth(0, true);
+export function updateUserHP(scene: Phaser.Scene, tower: Towers, mon: string) {
+  playerHealth = Towers.allHP(); playerDef = Towers.allDEF(); playerSpDef = Towers.allSPDEF(); updateHealth(0, true);
   currentTower = tower;
+  currentMon = mon;
   showPopup(scene, mon.slice(-2).split('').map(d => Number(d))[0], mon.slice(-2).split('').map(d => Number(d))[1], mon, "", true);
   tower.on('pointerdown', () => {
     const numbers = mon.slice(-2).split('').map(d => Number(d));
     currentTower = tower;
+    currentMon = mon;
     showPopup(scene, numbers[0], numbers[1], mon, "", true);
   });
 }

@@ -30,7 +30,7 @@ export class Tyrogue extends Phaser.GameObjects.Image {
           this.setTexture("pokemon14");
         }
         if (target && Tyrogue.machpunch) {
-          this.shoot(scene, target, -20);
+          this.shoot(scene, target);
         }
       }
     });
@@ -51,7 +51,7 @@ export class Tyrogue extends Phaser.GameObjects.Image {
     return closestEnemy;
   }
 
-  private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower, dy: number) {
+  private shoot(scene: Phaser.Scene, target: Phaser.GameObjects.PathFollower) {
     this.setAlpha(0);
     const projectile = scene.physics.add.image(this.x, this.y, 'pokemon14')
       .setDisplaySize(this.displayWidth, this.displayHeight)

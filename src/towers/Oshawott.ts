@@ -13,7 +13,7 @@ export class Oshawott extends Towers {
     x: number,
     y: number,
   ) {
-    super(scene, x, y, 'pokemon10', 150, 63, 55, 9, 9, 100, "Special", 3);
+    super(scene, x, y, 'pokemon10', 'Oshawott', 150, 100, "Special", 3);
     this.startAttacking(scene);
   }
 

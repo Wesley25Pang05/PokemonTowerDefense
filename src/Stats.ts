@@ -32,7 +32,6 @@ export class Stats {
 
   public static async getPokemon(name: string, level: number, trainer: string) {
     if (!this.pokedex) await this.loadPokedex();
-    console.log(Object.keys(this.pokedex?.[0] || {}));
 
     const entry = this.pokedex!.find(
       (row) => row.Name && row.Name.toLowerCase() === name.toLowerCase()

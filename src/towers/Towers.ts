@@ -1,9 +1,10 @@
 import Phaser from 'phaser';
-import { enemies, takeDamage, } from '../round';
-import { enemiesGroup } from '../index';
+import { currentMon, currentTower, updateUserHP } from '..';
+import { Stats } from '../Stats';
+import { badges } from '../round';
 
 export class Towers extends Phaser.GameObjects.Image {
-  private id: string;
+  private id: string; private pokemonName: string;
   private range: number;
   private power: number;
   private HP: number; private DEF: number; private SPDEF: number;
@@ -16,11 +17,8 @@ export class Towers extends Phaser.GameObjects.Image {
     x: number,
     y: number,
     pokemon: string,
+    pokemonName: string,
     range: number,
-    power: number,
-    hp: number,
-    def: number,
-    spdef: number,
     roundsPassed: number,
     attackType: string,
     stages: number
@@ -29,10 +27,10 @@ export class Towers extends Phaser.GameObjects.Image {
     Towers.allTowers.push(this);
     scene.add.existing(this);
     this.id = pokemon;
+    this.pokemonName = pokemonName;
     this.range = range;
-    this.power = power;
-    this.HP = hp; this.DEF = def; this.SPDEF = spdef;
     this.upgradePathTop = 0; this.upgradePathBottom = 0;
+    this.HP = 0; this.DEF = 0; this.SPDEF = 0; this.power = 0;
     this.roundsPassed = roundsPassed;
     this.attackType = attackType;
     this.stages = stages;
@@ -76,14 +74,20 @@ export class Towers extends Phaser.GameObjects.Image {
     this.setDisplaySize(30 + this.upgradePathTop * 5 + this.upgradePathBottom * 5,
     30 + this.upgradePathTop * 5 + this.upgradePathBottom * 5);
     if (this.stages == 2) {
-        if (this.upgradePathTop > 2) this.setTexture(this.id + "1");
-        else if (this.upgradePathBottom > 2) this.setTexture(this.id + "2");
+        if (this.upgradePathTop > 2) this.evolve(this.pokemonName, 1, -1, this.attackType);
+        else if (this.upgradePathBottom > 2) this.evolve(this.pokemonName, 2, -1, this.attackType);
     }
     else {
-        if (this.upgradePathTop == 3 || this.upgradePathBottom == 3) this.setTexture(this.id + "0");
-        else if (this.upgradePathTop == 4) this.setTexture(this.id + "1");
-        else if (this.upgradePathBottom == 4) this.setTexture(this.id + "2");
+        if (this.upgradePathTop == 3 || this.upgradePathBottom == 3) this.evolve(this.pokemonName, 0, -1, this.attackType);
+        else if (this.upgradePathTop == 4) this.evolve(this.pokemonName, 1, -1, this.attackType);
+        else if (this.upgradePathBottom == 4) this.evolve(this.pokemonName, 2, -1,this.attackType);
     }
+    Towers.updateAllStats(this.scene);
+  }
+
+  public evolve(monName: string, evolvedInto: number, range: number, attacktype: string) {
+    this.pokemonName = monName; this.range += range; this.attackType = attacktype; this.setTexture(this.id + '' + evolvedInto);
+    Towers.updateAllStats(this.scene);
   }
 
   public returnStats() {
@@ -124,12 +128,22 @@ export class Towers extends Phaser.GameObjects.Image {
     return num;
   }
 
-  public static updateRounds() {
+  public static updateRounds(scene: Phaser.Scene) {
     for (const tow of Towers.allTowers) {
         tow.roundsPassed++;
-        if (tow.roundsPassed > 100) {
-            tow.roundsPassed = 100;
+        if (tow.roundsPassed > badges * 10 + 20) {
+            tow.roundsPassed = badges * 10 + 20;
         }
+        this.updateAllStats(scene);
     }
+  }
+
+  public static async updateAllStats(scene: Phaser.Scene) {
+    for (const tow of Towers.allTowers) {
+      let allTheStats = Stats.getPokemon(tow.pokemonName, tow.roundsPassed, 'wild'); tow.HP = (await allTheStats).stats.HP;
+      tow.power = tow.attackType == 'Physical' ? (await allTheStats).stats.Attack : (await allTheStats).stats['Sp. Atk'];
+      tow.DEF = (await allTheStats).stats.Defense / 5; tow.SPDEF = (await allTheStats).stats['Sp. Def'] / 5;
+    }
+    updateUserHP(scene, currentTower, currentMon);
   }
 }

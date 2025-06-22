@@ -1,35 +1,5 @@
 import Phaser from 'phaser';
 import { award, changeLabel, currentHealth, enemiesGroup, lastPopUp, popupContainer, showPopup, updateHealth } from './index';
-import { Pichu } from './towers/Pichu';
-import { Eevee } from './towers/Eevee';
-import { Koffing } from './towers/Koffing';
-import { Cubone } from './towers/Cubone';
-import { Exeggcute } from './towers/Exeggcute';
-import { Slowpoke } from './towers/Slowpoke';
-import { Scyther } from './towers/Scyther';
-import { Poliwag } from './towers/Poliwag';
-import { Oddish } from './towers/Oddish';
-import { Cyndaquil } from './towers/Cyndaquil';
-import { Oshawott } from './towers/Oshawott';
-import { Rowlet } from './towers/Rowlet';
-import { MimeJr } from './towers/MimeJr';
-import { Tyrogue } from './towers/Tyrogue';
-import { Wurmple } from './towers/Wurmple';
-import { Ralts } from './towers/Ralts';
-import { Nincada } from './towers/Nincada';
-import { Snorunt } from './towers/Snorunt';
-import { Clamperl } from './towers/Clamperl';
-import { Burmy } from './towers/Burmy';
-import { Petilil } from './towers/Petilil';
-import { Rufflet } from './towers/Rufflet';
-import { Goomy } from './towers/Goomy';
-import { Bergmite } from './towers/Bergmite';
-import { Cosmog } from './towers/Cosmog';
-import { Applin } from './towers/Applin';
-import { Charcadet } from './towers/Charcadet';
-import { Rockruff } from './towers/Rockruff';
-import { Toxel } from './towers/Toxel';
-import { Kubfu } from './towers/Kubfu';
 import { Stats } from './Stats';
 import { Towers } from './towers/Towers';
 
@@ -40,10 +10,11 @@ let areaList = ["Route 1: Round 1/5", "Viridian City", "Route 2: Round 1/6", "Ba
     "Viridian Forest: Round 1/18", "Pewter City: Gym Incoming", "Gym 1: Brock | Round 1/3", "Pewter City: Boulder Badge Acquired",
     "Route 3: Round 1/13", "Back to Pewter City for a break.", "Mount Moon: Round 1/14", "Outside Mount Moon", "Route 4: Round 1/11",
     "Cerulean City", "Route 24: Round 1/18", "Back to Cerulean City for a break", "Route 25: Round 1/20", "Cerulean City: Gym Incoming",
-    "Gym 1: Misty | Round 1/4"];
+    "Gym 2: Misty | Round 1/4"];
 let path1: Phaser.Curves.Path;
 let path2: Phaser.Curves.Path;
 let spawning = false;
+export let badges = 0;
 
 export function paths(scene: Phaser.Scene) {
   path1 = scene.add.path(240, 480);
@@ -244,7 +215,7 @@ export function takeDamage(enemy: Phaser.GameObjects.PathFollower, scene: Phaser
   const data = enemy as any; const cd = cc > Math.random() ? 1.5 : 1;
   const dmgEFF = effectiveness(type, (enemy as any).typeOne, (enemy as any).typeTwo);
   const defenseCategory = category == "Physical" ? data.defense / data.defenseStages : data.specialdef / data.specialdefStages;
-  let dmgTotal = Math.ceil((amount * dmgEFF * cd) / defenseCategory);
+  let dmgTotal = Math.ceil((amount * dmgEFF * cd) / defenseCategory / 50000);
   if (data.health < dmgTotal) {
     award(data.health);
   }
@@ -475,10 +446,20 @@ export async function startRound(scene: Phaser.Scene) {
         case "Gym 1: Brock | Round 3/3":
             spawning = true;
             spawnEnemy(scene, "Geodude", "Gym Leader Brock's", 11);
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 5000));
             spawnEnemy(scene, "Onix", "Gym Leader Brock's", 11);
             spawning = false;
             break;
+        case "Elite Four: Round 1/5":
+            spawnEnemy(scene, "Dewgong", "Lorelei's ", 51);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            spawnEnemy(scene, "Jynx", "Lorelei's ", 51);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            spawnEnemy(scene, "Cloyster", "Lorelei's ", 51);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            spawnEnemy(scene, "Slowbro", "Lorelei's ", 51);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            spawnEnemy(scene, "Lapras", "Lorelei's ", 51);
         default:
             changeArea(scene);
             startRound(scene);
@@ -494,11 +475,14 @@ function changeArea(scene: Phaser.Scene) {
     else if (area.indexOf("Round") != -1 && area.substring(area.indexOf("Round")+6, area.indexOf("/")) != area.substring(area.indexOf("/")+1)) {
         const slash = area.indexOf("/");
         area = area.substring(0, slash - 1) + (parseInt(area.charAt(slash-1))+1) + area.substring(area.indexOf("/"));
-        Towers.updateRounds();
+        Towers.updateRounds(scene);
         startRound(scene);
     }
     else {
+        if (area.indexOf("Gym") != -1 && area.indexOf(": Gym") == -1) badges++;
         area = areaList[areaIndex];
+        // area = "Elite Four: Round 1/5"; //Changed for testing
+        // area = "Gym 1: Brock | Round 1/3";
         updateHealth(0, true);
         areaIndex++;
     }

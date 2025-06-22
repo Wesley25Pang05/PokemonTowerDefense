@@ -150,3 +150,7 @@ Dragonair,Dragon,,61,84,65,70,70,70,147
 Dragonite,Dragon,Flying,91,134,95,100,100,80,300
 Mewtwo,Psychic,,106,110,90,154,90,130,340
 Mew,Psychic,,100,100,100,100,100,100,300
+Rowlet,Grass,Flying,68,55,55,50,50,42,64
+Dartrix,Grass,Flying,78,75,75,70,70,52,147
+Alolan Decidueye,Grass,Ghost,78,107,75,100,100,70,265
+Hisuian Decidueye,Grass,Fighting,88,112,80,95,95,60,265
