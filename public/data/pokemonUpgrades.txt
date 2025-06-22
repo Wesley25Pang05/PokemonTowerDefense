@@ -5,18 +5,18 @@ $2340+LVL34: Rowlet evolves into Dartrix ❤️10 ⛊4 ⛉4 🥊20 and learns a 
 $3120+LVL68: Dartrix evolves into Alolan Decidueye ⛉6 🥊32 and upgrades Shadow Sneak to Spirit Shackle, 🎯40->80 that can pierce enemies.
 $0+LVL8: Rowlet gains it's ability Overgrow which increases damage of Leafage, Razor Leaf, and Leaf Blade by 25%.
 $0+LVL18: Rowlet learns Growl, -🥊100% to all its attacks.
-$3090+LVL34: Rowlet evolves into Dartrix ❤️10 ⛊4 ⛉4 🥊20 and learns a fighting move, 🎯65 Low Sweep ⚔️1.300s.
-$3120+LVL72: Dartrix evolves into Alolan Decidueye ❤️10 ⛊1 ⛉5 🥊37 and upgrades Low Sweep to Triple Arrows, 🎯65->30x3 ⚔️1.300s->1.500s 💥1/24->1/8 -⛊50%.
+$3090+LVL34: Rowlet evolves into Dartrix ❤️10 ⛊4 ⛉4 🥊20 and learns a fighting move, 🎯65 ⚔️1.300s Low Sweep.
+$3120+LVL72: Dartrix evolves into Hisuian Decidueye ❤️10 ⛊1 ⛉5 🥊37 and upgrades Low Sweep to Triple Arrows, 🎯65->30x3 ⚔️1.300s->1.500s 💥1/24->1/8 -⛊50%.
 
 pokemon10
-$200+LVL7: Water Pulse is an upgade of Water Gun, 🎯40->60 ⚔️0.300s->1.300s.
+$350+LVL7: Water Pulse is an upgade of Water Gun, 🎯40->60 ⚔️0.300s->1.300s 🏹150 -> 300.
 $600+LVL23: Surf is an upgrade of Water Pulse, 🎯60->90.
-$1980+LVL34: Oshawott evolves into Dewott ❤️20 ⛊3 ⛉3 ✨20 and upgrades Surf to Hydro Pump, 🎯90 -> 110, ⚔️1.300s -> 3.000s.
-$3680+LVL72: Dewott evolves into Unovan Samurott ❤️20 ⛊5 ⛉2 ✨25 and upgrades Hydro Pump to Hydro Cannon, 🎯110->150 ⚔️3.000s->5.000s.
+$1980+LVL34: Oshawott evolves into Dewott ❤️20 ⛊3 ⛉3 ✨20 and upgrades Surf to Hydro Pump, 🎯90 -> 110 ⚔️1.300s -> 2.000s.
+$6080+LVL72: Dewott evolves into Unovan Samurott ❤️20 ⛊5 ⛉2 ✨25 and upgrades Hydro Pump to Hydro Cannon, 🎯110->150 ⚔️2.000s->3.000s 🏹300 -> 900.
 $0+LVL8: Oshawott gains it's ability Torrent which increases damage of Water Gun, Water Pulse, Surf, Hydro Pump, and Hydro Cannon by 25%.
 $0+LVL13: Oshawott learns Focus Energy, 💥1/24->1/8 to all its attacks.
-$990+LVL34: Oshawott evolves into Dewott ❤️20 ⛊3 ⛉3 🥊12 and forgets Surf Pulse for dark move Sucker Punch, 🎯70 ⚔️0.800s 🏹300.
-$2520+LVL72: Dewott evolves into Hisuian Samurott ❤️15 ⛊4 ⛉1 🥊33 and upgrades Sucker Punch to Ceaseless Edge, 🎯70->65 ⚔️0.400s 🏹900.
+$540+LVL34: Oshawott evolves into Dewott ❤️20 ⛊3 ⛉3 🥊12 and forgets Surf Pulse for dark move Sucker Punch, 🎯70 ⚔️0.800s.
+$6920+LVL72: Dewott evolves into Hisuian Samurott ❤️15 ⛊4 ⛉1 🥊33 and upgrades Sucker Punch to Ceaseless Edge, 🎯70->65 ⚔️0.800s->1.600s 🏹300 -> 🏹900 that lasts nine seconds. Throws 2 or 1 at once if there are less than 3 or 9.
 
 pokemon20
 Cyndaquil has yet learned stuff because the owner is lazy at the moment.

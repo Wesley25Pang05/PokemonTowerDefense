@@ -43,6 +43,10 @@ export class Towers extends Phaser.GameObjects.Image {
     return this.range;
   }
 
+  public setRange(newRange: number) {
+    this.range = newRange;
+  }
+
   public getPower() {
     return this.power;
   }
@@ -93,10 +97,10 @@ export class Towers extends Phaser.GameObjects.Image {
   public returnStats() {
     let stats = "";
     if (this.attackType == "Physical") {
-        stats = `🌟${this.roundsPassed} ❤️${this.HP} ⛊${this.DEF} ⛉${this.SPDEF} 🥊${this.power} 🏹${this.range}`;
+        stats = `🌟${this.roundsPassed} ❤️${this.HP} ⛊${this.DEF} ⛉${this.SPDEF} 🥊${this.power} 🏹${this.range}\n`;
     }
     else if (this.attackType == "Special") {
-        stats = `🌟${this.roundsPassed} ❤️${this.HP} ⛊${this.DEF} ⛉${this.SPDEF} ✨${this.power} 🏹${this.range}`;
+        stats = `🌟${this.roundsPassed} ❤️${this.HP} ⛊${this.DEF} ⛉${this.SPDEF} ✨${this.power} 🏹${this.range}\n`;
     }
     else {
         stats = `THERES A BUG TO THIS POKEMON PLEASE REPORT THIS TO ME`;

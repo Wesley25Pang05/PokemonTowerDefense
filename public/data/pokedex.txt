@@ -154,3 +154,7 @@ Rowlet,Grass,Flying,68,55,55,50,50,42,64
 Dartrix,Grass,Flying,78,75,75,70,70,52,147
 Alolan Decidueye,Grass,Ghost,78,107,75,100,100,70,265
 Hisuian Decidueye,Grass,Fighting,88,112,80,95,95,60,265
+Oshawott,Water,,55,55,45,63,45,45,62
+Dewott,Water,,75,75,60,83,60,60,145
+Unovan Samurott,Water,,95,100,85,108,70,70,264
+Hisuian Samurott,Water,Dark,90,108,80,100,65,85,264

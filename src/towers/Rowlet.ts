@@ -8,7 +8,7 @@ export class Rowlet extends Towers {
   private razorLeafTimer?: Phaser.Time.TimerEvent;
   private leafBladeSpiritShackleTripleArrowsTimer?: Phaser.Time.TimerEvent;
   private shadowSneakTimer?: Phaser.Time.TimerEvent;
-
+  private lowSweepTimer?: Phaser.Time.TimerEvent;
 
   constructor(
     scene: Phaser.Scene,
@@ -35,6 +35,10 @@ export class Rowlet extends Towers {
     this.shadowSneakTimer = scene.time.addEvent({delay: 800, loop: true, callback: () => {
       const target = this.findNearestEnemy();
       if (target && this.getPath(true) == 3) this.shadowSneak(scene, target);
+    }});
+    this.lowSweepTimer = scene.time.addEvent({delay: 1300, loop: true, callback: () => {
+      const target = this.findNearestEnemy();
+      if (target && this.getPath(false) == 3) takeDamage(target, scene, "Fighting", this.getAttackType(), 65 * this.getPower() * 1300, 1/24);
     }});
   }
 
@@ -87,7 +91,7 @@ export class Rowlet extends Towers {
       .setDepth(1);
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
         const overgrow = this.getPath(false) > 0 ? 1.25 : 1;
-        takeDamage((enemy as any), scene, "Grass", "Physical", 55 * this.getPower() * 1000 * overgrow, 1/8);
+        takeDamage((enemy as any), scene, "Grass", this.getAttackType(), 55 * this.getPower() * 1000 * overgrow, 1/8);
         if (this.getPath(false) > 1) lowerState(scene, (enemy as any), 'attack', 1);
         projectile.destroy();
         scene.events.off('update', updateHandler);
@@ -128,7 +132,7 @@ export class Rowlet extends Towers {
           projectile.destroy();
           scene.events.off('update', updateHandler);
           const overgrow = this.getPath(false) > 0 ? 1.25 : 1;
-          takeDamage(target, scene, "Grass", "Physical", 90 * this.getPower() * 1500 * overgrow, 1/8);
+          takeDamage(target, scene, "Grass", this.getAttackType(), 90 * this.getPower() * 1500 * overgrow, 1/8);
           if (this.getPath(false) > 1) lowerState(scene, target, 'attack', 1);
         }
         projectile.setCrop(0, 72 - attackSpeed, attackSpeed, attackSpeed);
@@ -146,7 +150,7 @@ export class Rowlet extends Towers {
         .setDepth(1);
         scene.physics.moveToObject(projectile, target, 600);
         scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-          takeDamage((enemy as any), scene, "Ghost", "Physical", 40 * this.getPower() * 800, 1/24);
+          takeDamage((enemy as any), scene, "Ghost", this.getAttackType(), 40 * this.getPower() * 800, 1/24);
           this.setAlpha(1);
           projectile.destroy();
           scene.events.off('update', updateHandler);
@@ -181,7 +185,7 @@ export class Rowlet extends Towers {
       scene.physics.moveToObject(projectile, target, 750);
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
         if (!enemiesHit.includes((enemy as any))) {
-          takeDamage((enemy as any), scene, "Ghost", "Physical", 80 * this.getPower() * 1500, 1/24);
+          takeDamage((enemy as any), scene, "Ghost", this.getAttackType(), 80 * this.getPower() * 1500, 1/24);
           if (this.getPath(false) > 1) lowerState(scene, (enemy as any), 'attack', 1);
           enemiesHit.push((enemy as any));
         }
@@ -204,9 +208,9 @@ export class Rowlet extends Towers {
     let speed = 0;
     const projectile = scene.physics.add.image(this.x, this.y, 'projectile14')
       .setDisplaySize(24, 24)
-      .setDepth(1);
+      .setDepth(1)
       scene.physics.add.overlap(projectile, enemiesGroup, (proj, enemy) => {
-        takeDamage((enemy as any), scene, "Fighting", "Physical", 30 * this.getPower() * 1500, 1/8);
+        takeDamage((enemy as any), scene, "Fighting", this.getAttackType(), 30 * this.getPower() * 1500, 1/8);
         lowerState(scene, (enemy as any), 'defense', 0.5);
         if (this.getPath(false) > 1) lowerState(scene, (enemy as any), 'attack', 1);
         projectile.destroy();
@@ -249,20 +253,36 @@ export class Rowlet extends Towers {
   }
 
   public returnStats() {
-    let stats = super.returnStats();
+    let stats = "";
     switch (this.getPath(true)) {
       case 0:
-        stats += " | ⚔️2.000s 🎯40";
+        stats += " | ⚔️2.000s 🎯40 Leafage";
         break;
       case 1:
-        stats += " | ⚔️1.000s 🎯55 💥1/8";
+        stats += " | ⚔️1.000s 🎯55 💥1/8 Razor Leaf";
         break;
       case 2:
-        stats += " | ⚔️1.500s 🎯90 💥1/8";
-        break;
-      default:
+      case 3:
+      case 4:
+        stats += " | ⚔️1.500s 🎯90 💥1/8 Leaf Blade";
         break;
     }
-    return stats;
+    switch (this.getPath(true)) {
+      case 3:
+        stats += " | ⚔️0.800s 🎯40 Shadow Sneak";
+        break;
+      case 4:
+        stats += " | ⚔️0.800s 🎯80 Spirit Shackle";
+        break;
+    }
+    switch (this.getPath(false)) {
+      case 3:
+        stats += " | ⚔️1.300s 🎯65 Low Sweep";
+        break;
+      case 4:
+        stats += " | ⚔️1.500s 🎯30x3 💥1/8 -⛊50% Triple Arrows";
+        break;
+    }
+    return super.returnStats() + stats.substring(3);
   }
 }

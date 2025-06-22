@@ -11,10 +11,11 @@ let areaList = ["Route 1: Round 1/5", "Viridian City", "Route 2: Round 1/6", "Ba
     "Route 3: Round 1/13", "Back to Pewter City for a break.", "Mount Moon: Round 1/14", "Outside Mount Moon", "Route 4: Round 1/11",
     "Cerulean City", "Route 24: Round 1/18", "Back to Cerulean City for a break", "Route 25: Round 1/20", "Cerulean City: Gym Incoming",
     "Gym 2: Misty | Round 1/4"];
-let path1: Phaser.Curves.Path;
-let path2: Phaser.Curves.Path;
+export let path1: Phaser.Curves.Path;
+export let path2: Phaser.Curves.Path;
 let spawning = false;
 export let badges = 0;
+badges = 8; //Changed for testing
 
 export function paths(scene: Phaser.Scene) {
   path1 = scene.add.path(240, 480);
@@ -450,7 +451,24 @@ export async function startRound(scene: Phaser.Scene) {
             spawnEnemy(scene, "Onix", "Gym Leader Brock's", 11);
             spawning = false;
             break;
+        case "Gym 2: Misty | Round ?/?":
+            spawning = true;
+            spawnEnemy(scene, "Psyduck", "Gym Leader Misty's", 18);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            spawnEnemy(scene, "Starmie", "Gym Leader Misty's", 19);
+            spawning = false;
+            break;
+        case "Gym 3: Lt. Surge | Round ?/?":
+            spawning = true;
+            spawnEnemy(scene, "Voltorb", "Gym Leader Lt. Surge's", 25);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            spawnEnemy(scene, "Magnemite", "Gym Leader Lt. Surge's", 25);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            spawnEnemy(scene, "Raichu", "Gym Leader Lt. Surge's", 26);
+            spawning = false;
+            break;
         case "Elite Four: Round 1/5":
+            spawning = true;
             spawnEnemy(scene, "Dewgong", "Lorelei's ", 51);
             await new Promise(resolve => setTimeout(resolve, 5000));
             spawnEnemy(scene, "Jynx", "Lorelei's ", 51);
@@ -460,6 +478,7 @@ export async function startRound(scene: Phaser.Scene) {
             spawnEnemy(scene, "Slowbro", "Lorelei's ", 51);
             await new Promise(resolve => setTimeout(resolve, 5000));
             spawnEnemy(scene, "Lapras", "Lorelei's ", 51);
+            spawning = false;
         default:
             changeArea(scene);
             startRound(scene);
@@ -482,7 +501,9 @@ function changeArea(scene: Phaser.Scene) {
         if (area.indexOf("Gym") != -1 && area.indexOf(": Gym") == -1) badges++;
         area = areaList[areaIndex];
         // area = "Elite Four: Round 1/5"; //Changed for testing
-        // area = "Gym 1: Brock | Round 1/3";
+        // area = "Gym 1: Brock | Round 3/3";
+        // area = "Gym 2: Misty | Round ?/?";
+        // area = "Gym 3: Lt. Surge | Round ?/?";
         updateHealth(0, true);
         areaIndex++;
     }

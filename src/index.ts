@@ -312,7 +312,7 @@ export function showPopup(scene: Phaser.Scene, r: number, c: number, pokemon: st
   });
   popupContainer.add(label);
   if (pokemonActive) {
-    const stats = scene.add.text(boxX + 20, boxY + 154, currentTower.returnStats(), {
+    const stats = scene.add.text(boxX + 20, boxY + 148, currentTower.returnStats(), {
       fontSize: '12px',
       color: '#ffffff',
       wordWrap: { width: 650 }
